@@ -4,4 +4,8 @@
     <string name="fujin">附近</string>
     <string name="shibie">识别</string>
     <string name="shezhi">设置</string>
+
+    <string name="chooseWay">使用以下方式来识别花卉</string>
+    <string name="fromSD">从相册中选择</string>
+    <string name="fromCamera">拍照</string>
 </resources>
