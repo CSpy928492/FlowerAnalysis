@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FlowerAnalysis</string>
+
+    <string name="fujin">附近</string>
+    <string name="shibie">识别</string>
+    <string name="shezhi">设置</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_fujin"
+        android:icon="@drawable/fujin"
+        android:title="@string/fujin" />
+    <item
+        android:id="@+id/item_shibie"
+        android:icon="@drawable/shibie"
+        android:title="@string/shibie" />
+    <item
+        android:id="@+id/item_shezhi"
+        android:icon="@drawable/shezhi"
+        android:title="@string/shezhi" />
+
+</menu>
