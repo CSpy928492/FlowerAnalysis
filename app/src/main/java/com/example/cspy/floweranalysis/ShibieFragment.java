@@ -73,7 +73,9 @@ public class ShibieFragment extends Fragment {
                     Toast.makeText(getContext(), "图片剪切成功 照片位置:" + tempPicPath, Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "onActivityResult: tempPicPath:" + tempPicPath);
 
-                    Bitmap bitmap = BitmapFactory.decodeFile(tempPicPath);
+                    Intent intent = new Intent(getActivity(), ShowResultActivity.class);
+                    intent.putExtra("imagePath", tempPicPath);
+                    startActivity(intent);
 
 
                 } else {
@@ -195,13 +197,7 @@ public class ShibieFragment extends Fragment {
 
     }
 
-    private void displayResult(String imagePath) {
-        if (imagePath != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
 
-
-        }
-    }
 
     private String getImagePath(Uri uri, String selection) {
         String path = null;

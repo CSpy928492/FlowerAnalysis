@@ -8,4 +8,5 @@
     <string name="chooseWay">使用以下方式来识别花卉</string>
     <string name="fromSD">从相册中选择</string>
     <string name="fromCamera">拍照</string>
+    <string name="fromName">根据植物名</string>
 </resources>
