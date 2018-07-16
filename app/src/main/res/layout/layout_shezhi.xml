@@ -5,11 +5,30 @@
     android:layout_height="match_parent">
 
 
-    <TextView
-        android:id="@+id/uid"
-        android:text="CSpy"
+    <LinearLayout
+        android:id="@+id/account_setting"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="账号设置"
+            android:clickable="false"
+            android:focusable="false" />
+
+        <TextView
+            android:id="@+id/uid"
+            android:text="CSpy"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:clickable="false"
+            android:focusable="false" />
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
