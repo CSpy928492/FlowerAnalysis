@@ -21,13 +21,21 @@ public class ShezhiFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_shezhi,container,false);
 
-        TextView uidText = view.findViewById(R.id.uid);
 
         LinearLayout linearLayout = view.findViewById(R.id.account_setting);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AccountSetting.class);
+                startActivity(intent);
+            }
+        });
+
+        TextView allDongtai = view.findViewById(R.id.dongtai_all);
+        allDongtai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), DongtaiActivity.class);
                 startActivity(intent);
             }
         });

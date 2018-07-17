@@ -51,7 +51,8 @@
         <activity android:name=".ShowResultActivity" />
         <activity android:name=".AccountSetting" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".DongtaiActivity"></activity>
     </application>
 
 </manifest>
