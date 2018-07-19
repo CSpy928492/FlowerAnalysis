@@ -20,6 +20,9 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class FujinFragment extends Fragment {
 
     private static final String TAG = "FujinFragment";
@@ -91,6 +94,16 @@ public class FujinFragment extends Fragment {
         Log.e(TAG, "navigateTo: 方向：" + location.getDirection());
 
         LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+
+        JSONObject loc = new JSONObject();
+        try {
+            loc.put("x", location.getLatitude());
+            loc.put("y", location.getLongitude());
+            MainActivity.setLocation(loc);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
         baiduMap.animateMapStatus(update);
         update = MapStatusUpdateFactory.zoomTo(20f);
@@ -106,7 +119,7 @@ public class FujinFragment extends Fragment {
         }
     };
 
-    public LocationClientOption getDefaultLocationClientOption() {
+    public static LocationClientOption getDefaultLocationClientOption() {
         LocationClientOption mOption = new LocationClientOption();
         mOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         mOption.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系，如果配合百度地图使用，建议设置为bd09ll;
@@ -123,6 +136,16 @@ public class FujinFragment extends Fragment {
         mOption.setIsNeedAltitude(false);//可选，默认false，设置定位时是否需要海拔信息，默认不需要，除基础定位版本都可用
 
         return mOption;
+    }
+
+    public static String getLocationString(JSONObject location) throws JSONException {
+        BDLocation bdLocation = new BDLocation();
+        bdLocation.setLatitude(Double.parseDouble((String) location.get("x")));
+        bdLocation.setLongitude(Double.parseDouble((String) location.get("y")));
+
+        return bdLocation.getAddress().toString();
+
+
     }
 
 }

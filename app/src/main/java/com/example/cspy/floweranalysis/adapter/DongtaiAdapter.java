@@ -55,6 +55,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
         TextView dtZhiwuName;
         TextView dtTime;
         TextView dtLocation;
+        TextView dtComment;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -65,6 +66,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
             dtZhiwuName = itemView.findViewById(R.id.dongtai_zhiwuname);
             dtTime = itemView.findViewById(R.id.dontai_time);
             dtLocation = itemView.findViewById(R.id.dongtai_location);
+            dtComment = itemView.findViewById(R.id.dongtai_comment);
 
         }
     }

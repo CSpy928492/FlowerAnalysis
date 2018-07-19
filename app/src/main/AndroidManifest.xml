@@ -30,13 +30,7 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="ONDUSCNY8laiUakuMFSt3p92bv4bqLck" />
 
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -50,9 +44,15 @@
 
         <activity android:name=".ShowResultActivity" />
         <activity android:name=".AccountSetting" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".DongtaiActivity"></activity>
+        <activity android:name=".DongtaiActivity" />
     </application>
 
 </manifest>

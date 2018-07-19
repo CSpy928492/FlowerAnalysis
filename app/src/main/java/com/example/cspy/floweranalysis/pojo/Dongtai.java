@@ -12,6 +12,7 @@ public class Dongtai {
     String time;
     String content;
     Bitmap image;
+    String comment;
 
     public String getUserId() {
         return userId;
@@ -67,5 +68,13 @@ public class Dongtai {
 
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

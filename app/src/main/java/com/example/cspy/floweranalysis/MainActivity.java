@@ -4,25 +4,31 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.example.cspy.floweranalysis.pojo.Dongtai;
+import com.example.cspy.floweranalysis.pojo.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private int selectedItemId = R.id.item_fujin;
 
     final int SDK_PERMISSION_REQUEST = 0;
+
+    public static User user = new User();
+    public static JSONObject location;
+    public static List<Dongtai> dongtaiList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +110,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public static void setUser(JSONObject jsonObject) {
+        try {
+            user.setSex(jsonObject.getString("sex"));
+            user.setUserid(jsonObject.getString("userid"));
+            user.setUsername(jsonObject.getString("username"));
+            user.setPassword(jsonObject.getString("password"));
+            user.setUsertel(jsonObject.getString("usertel"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setLocation(JSONObject object) {
+        location = object;
     }
 
 
