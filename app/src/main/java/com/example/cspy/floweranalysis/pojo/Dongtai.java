@@ -5,6 +5,7 @@ import android.media.Image;
 
 public class Dongtai {
 
+    String dongtaiId;
     String userId;
     String userName;
     String zhiwuName;
@@ -76,5 +77,13 @@ public class Dongtai {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getDongtaiId() {
+        return dongtaiId;
+    }
+
+    public void setDongtaiId(String dongtaiId) {
+        this.dongtaiId = dongtaiId;
     }
 }

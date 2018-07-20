@@ -2,6 +2,8 @@ package com.example.cspy.floweranalysis.util;
 
 import android.util.Log;
 
+import com.baidu.mapapi.http.HttpClient;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +26,8 @@ public class HttpConnect {
     public static String sendMsgUri = "http://www.hzong.club:8080/Image_process/SendVerificationCodeServlet";
     public static String shibieUri = "http://www.hzong.club:8080/Image_process/InsertShibieServlet";
     public static String charuDongtai = "http://www.hzong.club:8080/Image_process/InsertDongtaiServlet";
+    public static String chaxunAllDongtai = "http://www.hzong.club:8080/Image_process/SelectAllDongtaiServlet";
+    public static String getImageUri = "http://www.hzong.club:8080/Image_process/upload/";
 
     public JSONObject getRequest(String uri) throws IOException, JSONException {
 
@@ -41,5 +45,18 @@ public class HttpConnect {
         }
     }
 
+    public byte[] getImage(String uri) throws IOException {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder().url(uri).build();
+
+        Response response = okHttpClient.newCall(request).execute();
+        Log.e(TAG, "postJSON: request" + request.toString());
+        if (response.isSuccessful()) {
+            return response.body().bytes();
+        } else {
+            Log.e(TAG, "getRequest: response:" + "null");
+            return null;
+        }
+    }
 
 }

@@ -2,6 +2,7 @@ package com.example.cspy.floweranalysis;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.example.cspy.floweranalysis.adapter.DongtaiAdapter;
+import com.example.cspy.floweranalysis.background.DongtaiGetTask;
 import com.example.cspy.floweranalysis.pojo.Dongtai;
 
 import java.util.ArrayList;
@@ -21,6 +23,9 @@ public class DongtaiActivity extends AppCompatActivity {
 
     private static final String TAG = "DongtaiActivity";
     List<Dongtai> dongtaiList = new ArrayList<>();
+
+    SwipeRefreshLayout swipeRefreshLayout;
+
 
 
     @Override
@@ -36,23 +41,20 @@ public class DongtaiActivity extends AppCompatActivity {
         }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        swipeRefreshLayout = findViewById(R.id.swiptlayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                DongtaiGetTask dongtaiGetTask = new DongtaiGetTask();
+                dongtaiGetTask.execute(swipeRefreshLayout);
+            }
+        });
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
 
-        for (int i = 0; i < 20; i++) {
-            Dongtai dongtai = new Dongtai();
-            dongtai.setUserName("用户" + i);
-            dongtai.setContent("内容rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr" + i);
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pic);
-            dongtai.setImage(bitmap);
-            dongtai.setZhiwuName("植物" + i);
-            dongtai.setTime("2018-07-17");
-            dongtai.setLocation("南京市");
-            dongtaiList.add(dongtai);
-        }
-        DongtaiAdapter adapter = new DongtaiAdapter(dongtaiList);
+        DongtaiAdapter adapter = new DongtaiAdapter(MainActivity.dongtaiList);
 
         Log.e(TAG, "onCreate: ListSize" + dongtaiList.size());
 
@@ -76,4 +78,6 @@ public class DongtaiActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

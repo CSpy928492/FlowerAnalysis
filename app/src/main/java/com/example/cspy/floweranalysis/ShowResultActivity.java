@@ -209,11 +209,11 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    class ShareTask extends AsyncTask<String, Void, JSONObject> {
+    class ShareTask extends AsyncTask<String, Void, Boolean> {
 
 
         @Override
-        protected JSONObject doInBackground(String... strings) {
+        protected Boolean doInBackground(String... strings) {
 
             String userid = "";
             String username = "";
@@ -252,18 +252,14 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
             try {
                 Response response = client.newCall(request).execute();
                 if (response.isSuccessful()) {
-                    String str = response.body().string();
-                    Log.e(TAG, "doInBackground: response.body():" + str);
-                    return new JSONObject(str);
+                    return true;
                 } else {
-                    return null;
+                    return false;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-            return null;
+            return false;
         }
 
         @Override
@@ -274,16 +270,10 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
         }
 
         @Override
-        protected void onPostExecute(JSONObject jsonObject) {
+        protected void onPostExecute(Boolean bool) {
             progressDialog1.dismiss();
-            if (jsonObject != null) {
-                try {
-                    if (jsonObject.get("msg").equals("1")) {
-                        Toast.makeText(ShowResultActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            if (bool) {
+                Toast.makeText(ShowResultActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(ShowResultActivity.this, "分享失败", Toast.LENGTH_SHORT).show();
             }

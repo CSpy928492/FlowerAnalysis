@@ -2,6 +2,7 @@ package com.example.cspy.floweranalysis;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -11,12 +12,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.example.cspy.floweranalysis.background.DongtaiGetTask;
 import com.example.cspy.floweranalysis.pojo.Dongtai;
 import com.example.cspy.floweranalysis.pojo.User;
+import com.example.cspy.floweranalysis.util.HttpConnect;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fragment,fujinFragment);
         transaction.commit();
+
+        getDongtaiList();
 
 
 
@@ -126,6 +132,24 @@ public class MainActivity extends AppCompatActivity {
 
     public static void setLocation(JSONObject object) {
         location = object;
+    }
+
+    public static List<Dongtai> getMyDongtaiList() {
+        List<Dongtai> myDongtaiList = new ArrayList<>();
+        String myId = user.getUserid();
+        if (dongtaiList != null) {
+            for (Dongtai dongtai : dongtaiList) {
+                if (dongtai.getUserId().equals(myId)) {
+                    myDongtaiList.add(dongtai);
+                }
+            }
+        }
+        return myDongtaiList;
+    }
+
+    private void getDongtaiList() {
+        DongtaiGetTask getTask = new DongtaiGetTask();
+        getTask.execute();
     }
 
 
