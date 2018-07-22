@@ -15,6 +15,8 @@ public class Dongtai {
     Bitmap image;
     String comment;
 
+    Boolean isMyDongtai;
+
     public String getUserId() {
         return userId;
     }
@@ -85,5 +87,13 @@ public class Dongtai {
 
     public void setDongtaiId(String dongtaiId) {
         this.dongtaiId = dongtaiId;
+    }
+
+    public Boolean getMyDongtai() {
+        return isMyDongtai;
+    }
+
+    public void setMyDongtai(Boolean myDongtai) {
+        isMyDongtai = myDongtai;
     }
 }

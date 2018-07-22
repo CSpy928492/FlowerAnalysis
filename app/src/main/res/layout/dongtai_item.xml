@@ -13,16 +13,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/dongtai_username"
-            android:text="HelloWorld"
+        <RelativeLayout
+            android:id="@+id/dongtai_tittle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/dongtai_username"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/dongtai_del_btn"
+                android:layout_alignParentRight="true"
+                android:text="删除"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/dongtai_content"
-            android:text="动态内容"
-            android:layout_below="@id/dongtai_username"
+            android:layout_below="@id/dongtai_tittle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -41,14 +54,12 @@
         <TextView
             android:id="@+id/dontai_time"
             android:layout_below="@id/dongtai_zhiwuname"
-            android:text="2018-07-17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/dongtai_location"
             android:layout_below="@id/dontai_time"
-            android:text="江苏省南京市"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

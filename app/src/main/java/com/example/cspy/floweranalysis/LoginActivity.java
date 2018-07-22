@@ -23,6 +23,12 @@ import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final int CORRECT_STATE = 10;
+    public static final int WITHOUT_USERTEL = 11;
+    public static final int WITHOUT_PASSWORD = 12;
+    public static final int WRONG_PASSWORD = 13;
+
+
     private static final String TAG = "LoginActivity";
 
     TextInputEditText usertel;

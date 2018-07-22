@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +40,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
         holder.dtZhiwuName.setText(dongtai.getZhiwuName());
         holder.dtTime.setText(dongtai.getTime());
         holder.dtLocation.setText(dongtai.getLocation());
-
+        holder.delBtn.setVisibility(dongtai.getMyDongtai() ? View.VISIBLE : View.INVISIBLE);
 
     }
 
@@ -56,6 +57,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
         TextView dtTime;
         TextView dtLocation;
         TextView dtComment;
+        Button delBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -67,6 +69,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
             dtTime = itemView.findViewById(R.id.dontai_time);
             dtLocation = itemView.findViewById(R.id.dongtai_location);
             dtComment = itemView.findViewById(R.id.dongtai_comment);
+            delBtn = itemView.findViewById(R.id.dongtai_del_btn);
 
         }
     }

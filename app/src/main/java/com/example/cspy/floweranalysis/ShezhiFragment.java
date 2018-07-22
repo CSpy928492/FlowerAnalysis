@@ -38,6 +38,17 @@ public class ShezhiFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), DongtaiActivity.class);
+                intent.putExtra("type", "all");
+                startActivity(intent);
+            }
+        });
+
+        TextView myDongtai = view.findViewById(R.id.dongtai_me);
+        myDongtai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), DongtaiActivity.class);
+                intent.putExtra("type", "my");
                 startActivity(intent);
             }
         });

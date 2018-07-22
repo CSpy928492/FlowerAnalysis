@@ -42,9 +42,9 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
     Bitmap bitmap;
     TextView resultText;
 
-    AlertDialog inputAlertDialog;
 
     JSONObject dataJSON;
+    String content;
 
 
     private static final String TAG = "ShowResultActivity";
@@ -114,10 +114,13 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_share:
+
                 inflater = LayoutInflater.from(ShowResultActivity.this);
                 mView = inflater.inflate(R.layout.set_content_alert, null);
                 inputDialog = new AlertDialog.Builder(ShowResultActivity.this);
                 inputDialog.setView(mView);
+
+                final AlertDialog inputAlertDialog;
 
                 inputAlertDialog = inputDialog.create();
                 inputAlertDialog.show();
@@ -132,19 +135,20 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
                     }
                 });
 
-
-                final EditText input = (EditText) findViewById(R.id.alert_content);
+                final EditText input = mView.findViewById(R.id.alert_content);
 
                 Button okButton = mView.findViewById(R.id.alert_confirm);
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         ShareTask shareTask = new ShareTask();
-                        String content = "动态内容";
+                        content = input.getText().toString();
                         shareTask.execute(content);
+                        if (inputAlertDialog != null && inputAlertDialog.isShowing()) {
+                            inputAlertDialog.dismiss();
+                        }
                     }
                 });
-
 
                 break;
         }
@@ -152,7 +156,6 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
 
 
     class ShiBieAsync extends AsyncTask<Void, Void, JSONObject> {
-
 
         @Override
         protected JSONObject doInBackground(Void... voids) {

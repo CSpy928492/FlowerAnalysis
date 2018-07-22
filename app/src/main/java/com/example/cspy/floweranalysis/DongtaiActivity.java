@@ -1,5 +1,6 @@
 package com.example.cspy.floweranalysis;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,11 +22,17 @@ import java.util.List;
 
 public class DongtaiActivity extends AppCompatActivity {
 
+    public static final int ALL_DONGTAI_SUCCESS = 20;
+    public static final int ALL_DONGTAI_FAIL = 21;
+
+
+
     private static final String TAG = "DongtaiActivity";
     List<Dongtai> dongtaiList = new ArrayList<>();
 
     SwipeRefreshLayout swipeRefreshLayout;
 
+    Boolean myDongtai;
 
 
     @Override
@@ -33,9 +40,18 @@ public class DongtaiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dongtai);
 
+        Intent intent = getIntent();
+        myDongtai = intent.getStringExtra("type").equals("my");
+
+
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle("动态");
+            if (myDongtai) {
+                actionBar.setTitle("动态");
+            } else {
+                actionBar.setTitle("我的动态");
+            }
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -54,7 +70,12 @@ public class DongtaiActivity extends AppCompatActivity {
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
 
-        DongtaiAdapter adapter = new DongtaiAdapter(MainActivity.dongtaiList);
+        DongtaiAdapter adapter;
+        if (myDongtai) {
+            adapter = new DongtaiAdapter(MainActivity.getMyDongtaiList());
+        } else {
+            adapter = new DongtaiAdapter(MainActivity.dongtaiList);
+        }
 
         Log.e(TAG, "onCreate: ListSize" + dongtaiList.size());
 

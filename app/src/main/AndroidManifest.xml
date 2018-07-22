@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -30,7 +31,7 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="ONDUSCNY8laiUakuMFSt3p92bv4bqLck" />
 
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -44,15 +45,18 @@
 
         <activity android:name=".ShowResultActivity" />
         <activity android:name=".AccountSetting" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity" />
+
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".DongtaiActivity" />
+        <activity
+            android:name=".WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".DongtaiActivity" />
     </application>
 
 </manifest>

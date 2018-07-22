@@ -53,6 +53,7 @@ public class DongtaiGetTask extends AsyncTask<View, Void, Boolean> {
                     dongtai.setUserId(json.getString("userid"));
                     dongtai.setUserName(json.getString("username"));
                     dongtai.setDongtaiId(json.getString("dongtaiid"));
+                    dongtai.setMyDongtai(json.getString("userid").equals(MainActivity.user.getUserid()));
 
 
                     String filepath = json.getString("img");

@@ -25,6 +25,9 @@ import org.json.JSONObject;
 
 public class FujinFragment extends Fragment {
 
+    public static final int CORRECT_LOCATION = 30;
+    public static final int WRONG_LOCATION = 31;
+
     private static final String TAG = "FujinFragment";
 
     private TextureMapView mapView = null;
