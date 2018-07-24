@@ -209,7 +209,6 @@ public class WelcomeActivity extends AppCompatActivity {
                             dongtai.setUserId(json.getString("userid"));
                             dongtai.setUserName(json.getString("username"));
                             dongtai.setDongtaiId(json.getString("dongtaiid"));
-                            dongtai.setMyDongtai(json.getString("userid").equals(MainActivity.user.getUserid()));
                             //提取图片
                             String filepath = json.getString("img");
                             String[] tempstrs = filepath.split("\\\\");
@@ -258,6 +257,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 publishProgress(FujinFragment.WRONG_LOCATION);
             }
 
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return null;
         }
 

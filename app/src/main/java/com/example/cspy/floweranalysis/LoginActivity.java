@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.cspy.floweranalysis.pojo.User;
 import com.example.cspy.floweranalysis.util.HttpConnect;
 
 import org.json.JSONException;
@@ -35,8 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText password;
     ProgressDialog progressDialog;
 
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +46,18 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.login_password);
         progressDialog = new ProgressDialog(this);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-        editor = preferences.edit();
-        String tel = preferences.getString("usertel", null);
-        String passwd = preferences.getString("password", null);
-        Log.e(TAG, "onCreate: savedTel:" + tel + "\n savedPasswd:" + passwd);
-
-        if (tel != null && passwd != null) {
-            usertel.setText(tel);
-            password.setText(passwd);
-            loginAction();
-        } else {
-            if (tel != null) {
-                usertel.setText(tel);
-            }
+        Intent intent = getIntent();
+        int state = intent.getIntExtra("state", -1);
+        switch (state) {
+            case WITHOUT_PASSWORD:
+            case WRONG_PASSWORD:
+                String usertelStr = intent.getStringExtra("usertel");
+                usertel.setText(usertelStr);
+                break;
+            case WITHOUT_USERTEL:
+                break;
+            case -1:
+                break;
         }
 
 
@@ -86,20 +83,19 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginAction() {
         try {
-            String loginMsg = getLoginMsg();
+            JSONObject loginMsg = getLoginMsg();
             if (null != loginMsg) {
-                JSONObject loginJSON = new JSONObject(loginMsg);
-                String fix = "?usertel=" + loginJSON.get("usertel");
-                fix += "&password=" + loginJSON.get("password");
+                String fix = "?usertel=" + loginMsg.get("usertel");
+                fix += "&password=" + loginMsg.get("password");
                 LoginTask loginTask = new LoginTask();
-                loginTask.execute(HttpConnect.loginUri + fix, loginJSON.toString());
+                loginTask.execute(HttpConnect.loginUri + fix);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private String getLoginMsg() throws JSONException {
+    private JSONObject getLoginMsg() throws JSONException {
         String usertelStr = usertel.getText().toString();
         String passwordStr = password.getText().toString();
 
@@ -110,30 +106,42 @@ public class LoginActivity extends AppCompatActivity {
             JSONObject object = new JSONObject();
             object.put("usertel", usertelStr);
             object.put("password", passwordStr);
-            return object.toString();
+            return object;
         }
 
     }
 
     class LoginTask extends AsyncTask<String, Void, Boolean> {
 
-        private JSONObject loginJSON;
 
         @Override
         protected Boolean doInBackground(String... strings) {
             String uri = strings[0];
-            try {
-                loginJSON = new JSONObject(strings[1]);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
             HttpConnect connect = new HttpConnect();
             try {
                 JSONObject resultJSON = connect.getRequest(uri);
                 if (resultJSON != null) {
                     if (resultJSON.get("msg").equals("1")) {
-                        JSONObject dataObject = resultJSON.getJSONObject("data");
-                        MainActivity.setUser(dataObject);
+                        JSONObject userJSON = resultJSON.getJSONObject("data");
+                        User user = new User();
+                        user.setSex(userJSON.getString("sex"));
+                        user.setUserid(userJSON.getString("userid"));
+                        user.setUsername(userJSON.getString("username"));
+                        user.setPassword(userJSON.getString("password"));
+                        user.setUsertel(userJSON.getString("usertel"));
+                        MyApplication myApplication = (MyApplication) getApplication();
+                        myApplication.setUser(user);
+
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.putString("usertel", user.getUsertel());
+                        editor.putString("password", user.getPassword());
+                        editor.apply();
+
+
                         return true;
                     }
                 }
@@ -159,16 +167,6 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             if (aBoolean) {
                 Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
-                finish();
-
-                try {
-                    editor.putString("usertel", loginJSON.getString("usertel"));
-                    editor.putString("password", loginJSON.getString("password"));
-                    editor.apply();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 finish();
                 startActivity(intent);

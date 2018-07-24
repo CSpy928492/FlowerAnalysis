@@ -43,17 +43,12 @@ public class ShibieFragment extends Fragment {
     private final int STORE_OK = 12;
     private final int CROP_PIC = 13;
 
-    Uri imageUri;
-
-    Bitmap bitmap;
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case TAKE_PHOTO:
                 if (resultCode == RESULT_OK) {
-                    Toast.makeText(getContext(), "图片拍摄成功", Toast.LENGTH_SHORT).show();
                     cropPicture(tempTakePhotoPath);
                 } else {
                     Toast.makeText(getContext(), "取消拍摄", Toast.LENGTH_SHORT).show();
@@ -61,23 +56,17 @@ public class ShibieFragment extends Fragment {
                 break;
             case CHOOSE_PIC:
                 if (resultCode == RESULT_OK) {
-                    Toast.makeText(getContext(), "图片选择成功", Toast.LENGTH_SHORT).show();
                     handleImageOnKitkat(data);
-
                 } else {
                     Toast.makeText(getContext(), "取消选择图片", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            //剪切图片
             case CROP_PIC:
                 if (resultCode == RESULT_OK) {
-                    Toast.makeText(getContext(), "图片剪切成功 照片位置:" + tempPicPath, Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "onActivityResult: tempPicPath:" + tempPicPath);
-
                     Intent intent = new Intent(getActivity(), ShowResultActivity.class);
                     intent.putExtra("imagePath", tempPicPath);
                     startActivity(intent);
-
-
                 } else {
                     Toast.makeText(getContext(), "剪切图片失败", Toast.LENGTH_SHORT).show();
                 }
@@ -94,14 +83,14 @@ public class ShibieFragment extends Fragment {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     takePhoto();
                 } else {
-                    Toast.makeText(getContext(), "授权失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "授权失败，未打开相机权限", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case STORE_OK:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     choosePicture();
                 } else {
-                    Toast.makeText(getContext(), "未授权，打开相册失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "授权失败，未打开访问SD卡权限", Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -159,7 +148,6 @@ public class ShibieFragment extends Fragment {
             e.printStackTrace();
         }
 
-//        Uri picUri = Uri.fromFile(outputImage);
         Uri picUri = FileProvider.getUriForFile(getActivity(), "com.example.cspy.floweranalysis.fileprovider", outputImage);
 
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
@@ -194,10 +182,7 @@ public class ShibieFragment extends Fragment {
         }
         Log.e(TAG, "handleImageOnKitkat: imagePath:" + imagePath);
         cropPicture(imagePath);
-
     }
-
-
 
     private String getImagePath(Uri uri, String selection) {
         String path = null;

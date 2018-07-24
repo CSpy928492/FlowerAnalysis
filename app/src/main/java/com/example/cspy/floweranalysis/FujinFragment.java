@@ -15,13 +15,21 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
+import com.example.cspy.floweranalysis.pojo.Dongtai;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FujinFragment extends Fragment {
 
@@ -48,6 +56,28 @@ public class FujinFragment extends Fragment {
         mLocationClient.setLocOption(getDefaultLocationClientOption());
         mLocationClient.registerLocationListener(mListener);
         mLocationClient.start();
+
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+        List<OverlayOptions> options = new ArrayList<>();
+
+        for (Dongtai dongtai : myApplication.getAllDongtaiList()) {
+            String location = dongtai.getLocation();
+            try {
+                JSONObject locationJSON = new JSONObject(location);
+
+                Log.e(TAG, "onCreateView: locationJSON:" + locationJSON.toString());
+                //Double.parseDouble((String)locationJSON.get("x"))
+
+                LatLng latLng = new LatLng(39.111, 123.00);
+                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(dongtai.getImage());
+                OverlayOptions overlayOptions = new MarkerOptions().position(latLng).icon(bitmapDescriptor).scaleX(0.2f).scaleY(0.2f).title(dongtai.getZhiwuName());
+                options.add(overlayOptions);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        baiduMap.addOverlays(options);
+
 
 
         return view;
@@ -93,8 +123,6 @@ public class FujinFragment extends Fragment {
     }
 
     private void navigateTo(BDLocation location) {
-        Log.e(TAG, "navigateTo: 地址:" + location.getLocationDescribe());
-        Log.e(TAG, "navigateTo: 方向：" + location.getDirection());
 
         LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -102,7 +130,7 @@ public class FujinFragment extends Fragment {
         try {
             loc.put("x", location.getLatitude());
             loc.put("y", location.getLongitude());
-            MainActivity.setLocation(loc);
+//            MainActivity.setLocation(loc);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -141,14 +169,5 @@ public class FujinFragment extends Fragment {
         return mOption;
     }
 
-    public static String getLocationString(JSONObject location) throws JSONException {
-        BDLocation bdLocation = new BDLocation();
-        bdLocation.setLatitude(Double.parseDouble((String) location.get("x")));
-        bdLocation.setLongitude(Double.parseDouble((String) location.get("y")));
-
-        return bdLocation.getAddress().toString();
-
-
-    }
 
 }

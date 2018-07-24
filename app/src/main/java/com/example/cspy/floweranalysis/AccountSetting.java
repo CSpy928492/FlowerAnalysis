@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.cspy.floweranalysis.pojo.User;
+
 public class AccountSetting extends AppCompatActivity {
 
     @Override
@@ -21,16 +23,24 @@ public class AccountSetting extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        MyApplication myApplication = (MyApplication) getApplication();
+        User user = myApplication.getUser();
+
         TextView textUserName = findViewById(R.id.account_name);
-        textUserName.setText(MainActivity.user.getUsername());
+        textUserName.setText(user.getUsername());
         TextView textUserTel = findViewById(R.id.account_tel);
-        String usertel = MainActivity.user.getUsertel();
-        String modifiedTel = usertel.substring(0, 3) + "****" + usertel.substring(7);
+        String usertel = user.getUsertel();
+        String modifiedTel;
+        if (usertel.length() != 11) {
+            modifiedTel = "错误";
+        } else {
+            modifiedTel = usertel.substring(0, 3) + "****" + usertel.substring(7);
+        }
         textUserTel.setText(modifiedTel);
         TextView textUserSex = findViewById(R.id.account_sex);
-        textUserSex.setText(MainActivity.user.getSex());
+        textUserSex.setText(user.getSex());
         TextView textUserDongtaiNum = findViewById(R.id.account_dongtai_num);
-        textUserDongtaiNum.setText(MainActivity.getMyDongtaiList().size() + "");
+        textUserDongtaiNum.setText(myApplication.getMyDongtaiList().size() + "");
 
     }
 

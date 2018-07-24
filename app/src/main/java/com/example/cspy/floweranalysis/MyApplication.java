@@ -1,6 +1,9 @@
 package com.example.cspy.floweranalysis;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -8,10 +11,15 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.cspy.floweranalysis.pojo.Dongtai;
 import com.example.cspy.floweranalysis.pojo.User;
+import com.example.cspy.floweranalysis.util.HttpConnect;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -141,4 +149,66 @@ public class MyApplication extends Application {
     public boolean isLocationValid() {
         return locationValid;
     }
+
+    public List<Dongtai> getMyDongtaiList() {
+        List<Dongtai> myDongtaiList = new ArrayList<>();
+        for (Dongtai dongtai : allDongtaiList) {
+            if (dongtai.getUserId().equals(user.getUserid())) {
+                myDongtaiList.add(dongtai);
+            }
+        }
+        return myDongtaiList;
+    }
+
+    public Boolean isInList(Dongtai dongtai) {
+        for (Dongtai dt : allDongtaiList) {
+            if (dt.getDongtaiId().equals(dongtai.getDongtaiId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void refreshDongtai() {
+        HttpConnect connect = new HttpConnect();
+        try {
+            JSONObject resultJSON = connect.getRequest(HttpConnect.chaxunAllDongtai);
+            if (resultJSON != null) {
+                //返回成功
+                if (resultJSON.get("msg").equals("1")) {
+                    JSONArray dongtaiArray = resultJSON.getJSONArray("data");
+                    ArrayList<Dongtai> dongtais = new ArrayList<>();
+                    for (int i = 0; i < dongtaiArray.length(); i++) {
+                        JSONObject json = dongtaiArray.getJSONObject(i);
+                        Dongtai dongtai = new Dongtai();
+                        dongtai.setContent(json.getString("content"));
+                        dongtai.setLocation(json.getString("location"));
+                        dongtai.setTime(json.getString("time"));
+                        dongtai.setZhiwuName(json.getString("zhiwuname"));
+                        dongtai.setUserId(json.getString("userid"));
+                        dongtai.setUserName(json.getString("username"));
+                        dongtai.setDongtaiId(json.getString("dongtaiid"));
+                        //提取图片
+                        String filepath = json.getString("img");
+                        String[] tempstrs = filepath.split("\\\\");
+                        //合成图片Url
+                        String filename = HttpConnect.getImageUri + tempstrs[tempstrs.length - 1];
+                        HttpConnect connect1 = new HttpConnect();
+                        byte[] bytes = connect1.getImage(filename);
+                        Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(bytes));
+                        dongtai.setImage(bitmap);
+                        dongtais.add(dongtai);
+                    }
+                    setAllDongtaiList(dongtais);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }

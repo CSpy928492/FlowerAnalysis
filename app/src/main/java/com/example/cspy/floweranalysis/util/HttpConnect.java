@@ -28,6 +28,7 @@ public class HttpConnect {
     public static String charuDongtai = "http://www.hzong.club:8080/Image_process/InsertDongtaiServlet";
     public static String chaxunAllDongtai = "http://www.hzong.club:8080/Image_process/SelectAllDongtaiServlet";
     public static String getImageUri = "http://www.hzong.club:8080/Image_process/upload/";
+    public static String delDongtai = "http://www.hzong.club:8080/Image_process/DeleteDongtaiServlet";
 
     public JSONObject getRequest(String uri) throws IOException, JSONException {
 

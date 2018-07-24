@@ -1,23 +1,18 @@
 package com.example.cspy.floweranalysis;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import com.example.cspy.floweranalysis.adapter.DongtaiAdapter;
-import com.example.cspy.floweranalysis.background.DongtaiGetTask;
 import com.example.cspy.floweranalysis.pojo.Dongtai;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DongtaiActivity extends AppCompatActivity {
@@ -28,11 +23,18 @@ public class DongtaiActivity extends AppCompatActivity {
 
 
     private static final String TAG = "DongtaiActivity";
-    List<Dongtai> dongtaiList = new ArrayList<>();
+
+    List<Dongtai> currentList;
 
     SwipeRefreshLayout swipeRefreshLayout;
+    RecyclerView recyclerView;
+
 
     Boolean myDongtai;
+    DongtaiAdapter adapter;
+
+
+
 
 
     @Override
@@ -43,26 +45,27 @@ public class DongtaiActivity extends AppCompatActivity {
         Intent intent = getIntent();
         myDongtai = intent.getStringExtra("type").equals("my");
 
-
+        MyApplication myApplication = (MyApplication) getApplication();
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             if (myDongtai) {
-                actionBar.setTitle("动态");
-            } else {
                 actionBar.setTitle("我的动态");
+            } else {
+                actionBar.setTitle("动态");
             }
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+
+        recyclerView = findViewById(R.id.recyclerview);
         swipeRefreshLayout = findViewById(R.id.swiptlayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                DongtaiGetTask dongtaiGetTask = new DongtaiGetTask();
-                dongtaiGetTask.execute(swipeRefreshLayout);
+                RefreshDongtaiList refreshDongtai = new RefreshDongtaiList();
+                refreshDongtai.execute();
             }
         });
 
@@ -70,25 +73,21 @@ public class DongtaiActivity extends AppCompatActivity {
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
 
-        DongtaiAdapter adapter;
+
         if (myDongtai) {
-            adapter = new DongtaiAdapter(MainActivity.getMyDongtaiList());
+            currentList = myApplication.getMyDongtaiList();
         } else {
-            adapter = new DongtaiAdapter(MainActivity.dongtaiList);
+            currentList = myApplication.getAllDongtaiList();
         }
 
-        Log.e(TAG, "onCreate: ListSize" + dongtaiList.size());
-
-
+        adapter = new DongtaiAdapter(currentList, myApplication.getUser(), myApplication);
         recyclerView.setAdapter(adapter);
+        RefreshDongtaiList refreshDongtai = new RefreshDongtaiList();
+        refreshDongtai.execute();
 
 
     }
 
-    private void initList(List<Dongtai> list) {
-
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -98,6 +97,34 @@ public class DongtaiActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    class RefreshDongtaiList extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            swipeRefreshLayout.setRefreshing(true);
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            MyApplication myApplication = (MyApplication) getApplication();
+            myApplication.refreshDongtai();
+            if (myDongtai) {
+                adapter.refreshMyItem();
+            } else {
+                adapter.refreshItem();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            recyclerView.scrollToPosition(0);
+            adapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
 

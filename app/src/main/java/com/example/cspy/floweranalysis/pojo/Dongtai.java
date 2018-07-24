@@ -3,6 +3,9 @@ package com.example.cspy.floweranalysis.pojo;
 import android.graphics.Bitmap;
 import android.media.Image;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Dongtai {
 
     String dongtaiId;
@@ -15,7 +18,6 @@ public class Dongtai {
     Bitmap image;
     String comment;
 
-    Boolean isMyDongtai;
 
     public String getUserId() {
         return userId;
@@ -89,11 +91,5 @@ public class Dongtai {
         this.dongtaiId = dongtaiId;
     }
 
-    public Boolean getMyDongtai() {
-        return isMyDongtai;
-    }
 
-    public void setMyDongtai(Boolean myDongtai) {
-        isMyDongtai = myDongtai;
-    }
 }

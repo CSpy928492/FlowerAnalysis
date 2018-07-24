@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.cspy.floweranalysis.pojo.User;
+
 public class ShezhiFragment extends Fragment {
 
     @Nullable
@@ -57,27 +59,24 @@ public class ShezhiFragment extends Fragment {
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                SharedPreferences preferenceManager = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                SharedPreferences.Editor editor = preferenceManager.edit();
+                MyApplication myApplication = (MyApplication) getActivity().getApplication();
+                User user = myApplication.getUser();
 
-                String usertel = MainActivity.user.getUsertel();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                intent.putExtra("state", LoginActivity.WITHOUT_PASSWORD);
+                intent.putExtra("usertel", user.getUsertel());
+
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.apply();
-                editor.putString("usertel", usertel);
+                editor.putString("usertel", user.getUsertel());
                 editor.apply();
+
                 startActivity(intent);
                 getActivity().finish();
             }
         });
-
-
-
-
-
-
-
-
         return view;
     }
 }

@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cspy.floweranalysis.pojo.User;
 import com.example.cspy.floweranalysis.util.HttpConnect;
 
 import org.json.JSONException;
@@ -129,7 +130,7 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
                 cancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (inputAlertDialog != null && inputAlertDialog.isShowing()) {
+                        if (inputAlertDialog.isShowing()) {
                             inputAlertDialog.dismiss();
                         }
                     }
@@ -159,11 +160,15 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         protected JSONObject doInBackground(Void... voids) {
+            MyApplication myApplication = (MyApplication) getApplication();
+            User user = myApplication.getUser();
+            JSONObject location = myApplication.getLocation();
+
             OkHttpClient client = new OkHttpClient();
             RequestBody filebody = RequestBody.create(MediaType.parse("image/jpeg"), image);
             RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                    .addFormDataPart("userid", MainActivity.user.getUserid())
-                    .addFormDataPart("location", MainActivity.location.toString())
+                    .addFormDataPart("userid", user.getUserid())
+                    .addFormDataPart("location", location.toString())
                     .addFormDataPart("src", "temp.jpg", filebody)
                     .build();
             Request request = new Request.Builder()
@@ -217,6 +222,9 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         protected Boolean doInBackground(String... strings) {
+            MyApplication myApplication = (MyApplication) getApplication();
+            User user = myApplication.getUser();
+            JSONObject locationJSON = myApplication.getLocation();
 
             String userid = "";
             String username = "";
@@ -226,10 +234,10 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
             String content = "";
 
             try {
-                userid = MainActivity.user.getUserid();
-                username = MainActivity.user.getUsername();
+                userid = user.getUserid();
+                username = user.getUsername();
                 zhiwuname = (String) dataJSON.get("shibiename");
-                location = MainActivity.location.toString();
+                location = locationJSON.toString();
                 time = System.currentTimeMillis() + "";
                 content = strings[0];
             } catch (JSONException e) {
