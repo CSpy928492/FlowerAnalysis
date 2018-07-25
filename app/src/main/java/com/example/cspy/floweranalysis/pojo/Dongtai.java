@@ -8,16 +8,16 @@ import java.util.List;
 
 public class Dongtai {
 
-    String dongtaiId;
-    String userId;
-    String userName;
-    String zhiwuName;
-    String location;
-    String time;
-    String content;
-    Bitmap image;
-    String comment;
+    private String dongtaiId;
+    private String userId;
+    private String userName;
+    private String zhiwuName;
+    private String location;
+    private String time;
+    private String content;
+    private Bitmap image;
 
+    private String hLocation;
 
     public String getUserId() {
         return userId;
@@ -75,13 +75,7 @@ public class Dongtai {
         this.image = image;
     }
 
-    public String getComment() {
-        return comment;
-    }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 
     public String getDongtaiId() {
         return dongtaiId;
@@ -91,5 +85,16 @@ public class Dongtai {
         this.dongtaiId = dongtaiId;
     }
 
+    @Override
+    public String toString() {
+        return dongtaiId + ":" + content + "/" + userId;
+    }
 
+    public String gethLocation() {
+        return hLocation;
+    }
+
+    public void sethLocation(String hLocation) {
+        this.hLocation = hLocation;
+    }
 }

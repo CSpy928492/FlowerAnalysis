@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".ShowResultActivity">
 
     <ImageView
@@ -14,12 +15,15 @@
 
     <TextView
         android:id="@+id/result_textview"
+        android:textColor="@color/normal_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btn_share"
-        android:text="分享至动态"
+        android:background="@color/normal_color"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="@string/shared_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

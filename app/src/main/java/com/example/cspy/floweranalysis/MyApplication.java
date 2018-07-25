@@ -3,7 +3,6 @@ package com.example.cspy.floweranalysis;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -25,8 +24,10 @@ import java.util.List;
 
 public class MyApplication extends Application {
 
+    private static final String TAG = "MyApplication";
 
-    private List<Dongtai> allDongtaiList;
+
+    volatile private List<Dongtai> allDongtaiList;
     private User user;
 
     private JSONObject location;
@@ -45,8 +46,8 @@ public class MyApplication extends Application {
 
         location = new JSONObject();
         try {
-            location.put("x", "116.38");
-            location.put("y", "39.9");
+            location.put("x", "39.9");
+            location.put("y", "116.38");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -81,10 +82,10 @@ public class MyApplication extends Application {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             if (null != bdLocation && bdLocation.getLocType() != BDLocation.TypeServerError) {
+                location = new JSONObject();
                 try {
-                    location = new JSONObject();
-                    location.put("x", bdLocation.getLatitude() + "");
-                    location.put("y", bdLocation.getLongitude() + "");
+                    location.put("x", bdLocation.getLatitude());
+                    location.put("y", bdLocation.getLongitude());
                     locationValid = true;
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -188,6 +189,22 @@ public class MyApplication extends Application {
                         dongtai.setUserId(json.getString("userid"));
                         dongtai.setUserName(json.getString("username"));
                         dongtai.setDongtaiId(json.getString("dongtaiid"));
+
+                        //转换成可读的形式
+                        JSONObject jsonObject = new JSONObject(dongtai.getLocation());
+                        String x = jsonObject.getString("x");
+                        String y = jsonObject.getString("y");
+                        String ak = "ONDUSCNY8laiUakuMFSt3p92bv4bqLck";//&callback=renderReverse
+                        String uri = "http://api.map.baidu.com/geocoder/v2/?ak=" + ak + "&location=" + x + "," + y + "&output=json&pois=0&mcode=" + "45:B5:D6:03:EB:1F:E3:7F:D9:59:E8:06:90:C4:6B:06:DF:64:64:69;com.example.cspy.floweranalysis";
+                        HttpConnect locationConnect = new HttpConnect();
+                        JSONObject hLocationJSON = locationConnect.getRequest(uri);
+                        if (hLocationJSON != null && hLocationJSON.get("status").equals(0)) {
+                            dongtai.sethLocation(hLocationJSON.getJSONObject("result").get("formatted_address").toString());
+                        } else {
+                            dongtai.sethLocation("江苏省南京市");
+                        }
+
+
                         //提取图片
                         String filepath = json.getString("img");
                         String[] tempstrs = filepath.split("\\\\");

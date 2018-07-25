@@ -25,16 +25,20 @@
 
         <Button
             android:id="@+id/alert_cancel"
-            android:text="取消"
+            android:text="@string/content_cancel_btn"
+            android:textColor="@color/normal_color"
+            android:background="@color/colorPrimaryDark"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/alert_confirm"
-            android:text="发送"
+            android:text="@string/content_send_btn"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:textColor="@color/normal_color"
+            android:background="@color/colorPrimaryDark"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

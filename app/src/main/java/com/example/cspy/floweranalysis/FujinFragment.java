@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -28,8 +30,10 @@ import com.example.cspy.floweranalysis.pojo.Dongtai;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class FujinFragment extends Fragment {
 
@@ -42,14 +46,18 @@ public class FujinFragment extends Fragment {
     private BaiduMap baiduMap;
     LocationClient mLocationClient;
 
+    Boolean isFirstTime;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_fujin,container,false);
 
-        mapView = view.findViewById(R.id.bmapView);
+        mapView = (TextureMapView) view.findViewById(R.id.bmapView);
         baiduMap = mapView.getMap();
+
+        isFirstTime = true;
 
 
         mLocationClient = new LocationClient(getContext());
@@ -66,11 +74,25 @@ public class FujinFragment extends Fragment {
                 JSONObject locationJSON = new JSONObject(location);
 
                 Log.e(TAG, "onCreateView: locationJSON:" + locationJSON.toString());
-                //Double.parseDouble((String)locationJSON.get("x"))
+                DecimalFormat format = new DecimalFormat("0.000000");
 
-                LatLng latLng = new LatLng(39.111, 123.00);
-                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(dongtai.getImage());
-                OverlayOptions overlayOptions = new MarkerOptions().position(latLng).icon(bitmapDescriptor).scaleX(0.2f).scaleY(0.2f).title(dongtai.getZhiwuName());
+                Double x = Double.valueOf(format.format((Double) locationJSON.get("x") + Math.random() / 1000));
+
+                Double y = Double.valueOf(format.format((Double) locationJSON.get("y") + Math.random() / 1000));
+
+
+                LatLng latLng = new LatLng(x, y);
+
+
+                View markerView = View.inflate(getActivity(), R.layout.marker_item, null);
+                TextView textView = (TextView) markerView.findViewById(R.id.marker_text);
+                ImageView imageView = (ImageView) markerView.findViewById(R.id.marker_icon);
+                textView.setText(dongtai.getZhiwuName());
+                textView.setTextSize(80);
+                imageView.setImageBitmap(dongtai.getImage());
+
+                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromView(markerView);
+                OverlayOptions overlayOptions = new MarkerOptions().position(latLng).icon(bitmapDescriptor).scaleX(0.3f).scaleY(0.3f); //
                 options.add(overlayOptions);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -99,6 +121,7 @@ public class FujinFragment extends Fragment {
     @Override
     public void onResume() {
         mapView.onResume();
+        isFirstTime = true;
         super.onResume();
 
     }
@@ -118,6 +141,7 @@ public class FujinFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        isFirstTime = true;
 
 
     }
@@ -145,7 +169,10 @@ public class FujinFragment extends Fragment {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             if (null != bdLocation && bdLocation.getLocType() != BDLocation.TypeServerError) {
-                navigateTo(bdLocation);
+                if (isFirstTime) {
+                    navigateTo(bdLocation);
+                    isFirstTime = false;
+                }
             }
         }
     };
@@ -157,7 +184,7 @@ public class FujinFragment extends Fragment {
         mOption.setScanSpan(3000);//可选，默认0，即仅定位一次，设置发起连续定位请求的间隔需要大于等于1000ms才是有效的
         mOption.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
         mOption.setIsNeedLocationDescribe(true);//可选，设置是否需要地址描述
-        mOption.setNeedDeviceDirect(true);//可选，设置是否需要设备方向结果
+        mOption.setNeedDeviceDirect(false);//可选，设置是否需要设备方向结果
         mOption.setLocationNotify(false);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
         mOption.setIgnoreKillProcess(true);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
         mOption.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”

@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.File;
@@ -105,8 +106,8 @@ public class ShibieFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_shibie,container,false);
 
-        Button btnFromSD = view.findViewById(R.id.fromSD);
-        Button btnFromCamera = view.findViewById(R.id.fromCramera);
+        ImageButton btnFromSD = (ImageButton) view.findViewById(R.id.fromSD);
+        ImageButton btnFromCamera = (ImageButton) view.findViewById(R.id.fromCramera);
 
         tempPicPath = getActivity().getExternalCacheDir() + "/temp.jpg";
         tempTakePhotoPath = getActivity().getExternalCacheDir() + "/tempPhoto.jpg";

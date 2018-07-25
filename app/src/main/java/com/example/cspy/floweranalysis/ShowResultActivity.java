@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -66,7 +67,7 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
         progressDialog.setCancelable(false);
         progressDialog1 = new ProgressDialog(this);
         progressDialog1.setCancelable(false);
-        resultText = findViewById(R.id.result_textview);
+        resultText = (TextView) findViewById(R.id.result_textview);
 
 
 
@@ -80,14 +81,14 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
         }
 
 
-        ImageView imageView = findViewById(R.id.result_imageview);
+        ImageView imageView = (ImageView) findViewById(R.id.result_imageview);
         bitmap = BitmapFactory.decodeFile(imagePath);
         new ShiBieAsync().execute();
 
         imageView.setImageBitmap(bitmap);
 
 
-        Button shareBtn = findViewById(R.id.btn_share);
+        Button shareBtn = (Button) findViewById(R.id.btn_share);
         shareBtn.setOnClickListener(this);
 
 
@@ -126,7 +127,7 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
                 inputAlertDialog = inputDialog.create();
                 inputAlertDialog.show();
 
-                Button cancelButton = mView.findViewById(R.id.alert_cancel);
+                Button cancelButton = (Button) mView.findViewById(R.id.alert_cancel);
                 cancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -136,9 +137,9 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
                     }
                 });
 
-                final EditText input = mView.findViewById(R.id.alert_content);
+                final EditText input = (EditText) mView.findViewById(R.id.alert_content);
 
-                Button okButton = mView.findViewById(R.id.alert_confirm);
+                Button okButton = (Button) mView.findViewById(R.id.alert_confirm);
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -205,7 +206,11 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
             if (jsonObject != null) {
                 try {
                     dataJSON = jsonObject.getJSONObject("data");
-                    resultText.setText("植物名：" + dataJSON.get("shibiename") + "\n可信度：" + dataJSON.get("kexingdu"));
+                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                    Double rawRate = Double.parseDouble((String) dataJSON.get("kexingdu"));
+                    String rate = decimalFormat.format(rawRate * 100);
+                    resultText.setText("植物名：" + dataJSON.get("shibiename") + "\n可信度：" + rate + "%");
+                    resultText.setTextSize(25);
                     Toast.makeText(ShowResultActivity.this, "识别成功", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();

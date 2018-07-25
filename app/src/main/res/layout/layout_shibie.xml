@@ -5,21 +5,32 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:textSize="50sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
         android:text="@string/chooseWay" />
 
-    <Button
-        android:id="@+id/fromSD"
-        android:text="@string/fromSD"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/fromCramera"
-        android:text="@string/fromCamera"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        <ImageButton
+            android:id="@+id/fromSD"
+            android:layout_margin="50dp"
+            android:background="@drawable/picture"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_width" />
+
+        <ImageButton
+            android:id="@+id/fromCramera"
+            android:layout_marginTop="50dp"
+            android:layout_width="@dimen/icon_width"
+            android:background="@drawable/camera"
+            android:layout_height="@dimen/icon_width" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

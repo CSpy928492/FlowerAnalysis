@@ -26,7 +26,12 @@ public class ShezhiFragment extends Fragment {
         View view = inflater.inflate(R.layout.layout_shezhi,container,false);
 
 
-        LinearLayout linearLayout = view.findViewById(R.id.account_setting);
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+
+        TextView username = (TextView) view.findViewById(R.id.uid);
+        username.setText(myApplication.getUser().getUsername());
+
+        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.account_setting);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,7 +40,7 @@ public class ShezhiFragment extends Fragment {
             }
         });
 
-        TextView allDongtai = view.findViewById(R.id.dongtai_all);
+        TextView allDongtai = (TextView) view.findViewById(R.id.dongtai_all);
         allDongtai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +50,7 @@ public class ShezhiFragment extends Fragment {
             }
         });
 
-        TextView myDongtai = view.findViewById(R.id.dongtai_me);
+        TextView myDongtai = (TextView) view.findViewById(R.id.dongtai_me);
         myDongtai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +60,7 @@ public class ShezhiFragment extends Fragment {
             }
         });
 
-        Button exitBtn = view.findViewById(R.id.exitBtn);
+        Button exitBtn = (Button) view.findViewById(R.id.exitBtn);
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -46,6 +46,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
     Intent intent;
 
+    int i = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,65 +57,24 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         Bitmap welcomeBackground = BitmapFactory.decodeResource(getResources(), R.drawable.welcome);
-        ImageView imageView = findViewById(R.id.imageview_welcome);
+        ImageView imageView = (ImageView) findViewById(R.id.imageview_welcome);
         imageView.setImageBitmap(welcomeBackground);
 
-        progressBar = findViewById(R.id.progressbar_welcome);
-        task1 = findViewById(R.id.task_1);
+        progressBar = (ProgressBar) findViewById(R.id.progressbar_welcome);
+        task1 = (TextView) findViewById(R.id.task_1);
         task1.setBackgroundColor(getResources().getColor(R.color.normal_color, null));
-        task2 = findViewById(R.id.task_2);
+        task2 = (TextView) findViewById(R.id.task_2);
         task2.setBackgroundColor(getResources().getColor(R.color.normal_color, null));
-        task3 = findViewById(R.id.task_3);
+        task3 = (TextView) findViewById(R.id.task_3);
         task3.setBackgroundColor(getResources().getColor(R.color.normal_color, null));
 
-        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        for (int i = 0; i < permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(getBaseContext(), permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{permissions[i]}, i);
-            }
-        }
+
 
         new InitTask().execute();
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        MyApplication myApplication = (MyApplication) getApplication();
 
-        switch (requestCode) {
-            case 0:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myApplication.setPermission_coarse_location(true);
-                } else {
-                    myApplication.setPermission_coarse_location(false);
-                }
-                break;
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myApplication.setPermission_fine_location(true);
-                } else {
-                    myApplication.setPermission_fine_location(false);
-                }
-                break;
-            case 2:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myApplication.setPermission_camera(true);
-                } else {
-                    myApplication.setPermission_camera(false);
-                }
-                break;
-            case 3:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myApplication.setPermission_write_external(true);
-                } else {
-                    myApplication.setPermission_write_external(false);
-                }
-                break;
-
-        }
-    }
 
     class InitTask extends AsyncTask<Void, Integer, Void> {
 
@@ -209,6 +170,22 @@ public class WelcomeActivity extends AppCompatActivity {
                             dongtai.setUserId(json.getString("userid"));
                             dongtai.setUserName(json.getString("username"));
                             dongtai.setDongtaiId(json.getString("dongtaiid"));
+
+                            //转换成可读的形式
+                            JSONObject jsonObject = new JSONObject(dongtai.getLocation());
+                            String x = jsonObject.getString("x");
+                            String y = jsonObject.getString("y");
+                            String ak = "ONDUSCNY8laiUakuMFSt3p92bv4bqLck";//&callback=renderReverse
+                            String uri = "http://api.map.baidu.com/geocoder/v2/?ak=" + ak + "&location=" + x + "," + y + "&output=json&pois=0&mcode=" + "45:B5:D6:03:EB:1F:E3:7F:D9:59:E8:06:90:C4:6B:06:DF:64:64:69;com.example.cspy.floweranalysis";
+                            HttpConnect locationConnect = new HttpConnect();
+                            JSONObject hLocationJSON = locationConnect.getRequest(uri);
+                            if (hLocationJSON != null && hLocationJSON.get("status").equals(0)) {
+                                dongtai.sethLocation(hLocationJSON.getJSONObject("result").get("formatted_address").toString());
+                            } else {
+                                dongtai.sethLocation("江苏省南京市");
+                            }
+
+
                             //提取图片
                             String filepath = json.getString("img");
                             String[] tempstrs = filepath.split("\\\\");
@@ -236,8 +213,8 @@ public class WelcomeActivity extends AppCompatActivity {
             }
 
             //获取本机位置
-            int i = 5;
-            //等待定位1秒钟
+            int i = 10;
+            //等待定位2秒钟
             while (!(myApplication.isPermission_coarse_location() || myApplication.isPermission_fine_location())) {
                 if (myApplication.isLocationValid()) {
                     publishProgress(FujinFragment.CORRECT_LOCATION);
@@ -297,8 +274,6 @@ public class WelcomeActivity extends AppCompatActivity {
                     task3.setBackgroundColor(getResources().getColor(R.color.error_color, null));
                     break;
             }
-
-
             super.onProgressUpdate(values);
         }
     }

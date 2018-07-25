@@ -42,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        usertel = findViewById(R.id.login_account);
-        password = findViewById(R.id.login_password);
+        usertel = (TextInputEditText) findViewById(R.id.login_account);
+        password = (TextInputEditText) findViewById(R.id.login_password);
         progressDialog = new ProgressDialog(this);
 
         Intent intent = getIntent();
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-        Button regsiterBtn = findViewById(R.id.register_btn);
+        Button regsiterBtn = (Button) findViewById(R.id.register_btn);
         regsiterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button loginBtn = findViewById(R.id.loggin_btn);
+        Button loginBtn = (Button) findViewById(R.id.loggin_btn);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

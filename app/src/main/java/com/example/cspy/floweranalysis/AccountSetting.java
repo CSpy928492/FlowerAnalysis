@@ -26,9 +26,9 @@ public class AccountSetting extends AppCompatActivity {
         MyApplication myApplication = (MyApplication) getApplication();
         User user = myApplication.getUser();
 
-        TextView textUserName = findViewById(R.id.account_name);
+        TextView textUserName = (TextView) findViewById(R.id.account_name);
         textUserName.setText(user.getUsername());
-        TextView textUserTel = findViewById(R.id.account_tel);
+        TextView textUserTel = (TextView) findViewById(R.id.account_tel);
         String usertel = user.getUsertel();
         String modifiedTel;
         if (usertel.length() != 11) {
@@ -37,9 +37,9 @@ public class AccountSetting extends AppCompatActivity {
             modifiedTel = usertel.substring(0, 3) + "****" + usertel.substring(7);
         }
         textUserTel.setText(modifiedTel);
-        TextView textUserSex = findViewById(R.id.account_sex);
+        TextView textUserSex = (TextView) findViewById(R.id.account_sex);
         textUserSex.setText(user.getSex());
-        TextView textUserDongtaiNum = findViewById(R.id.account_dongtai_num);
+        TextView textUserDongtaiNum = (TextView) findViewById(R.id.account_dongtai_num);
         textUserDongtaiNum.setText(myApplication.getMyDongtaiList().size() + "");
 
     }

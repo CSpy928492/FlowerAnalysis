@@ -35,13 +35,10 @@ public class HttpConnect {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder().url(uri).build();
         Response response = okHttpClient.newCall(request).execute();
-        Log.e(TAG, "postJSON: request" + request.toString());
         if (response.isSuccessful()) {
             String str = response.body().string();
-            Log.e(TAG, "postJSON: response:" + str);
             return new JSONObject(str);
         } else {
-            Log.e(TAG, "getRequest: response:" + "null");
             return null;
         }
     }
@@ -51,11 +48,9 @@ public class HttpConnect {
         Request request = new Request.Builder().url(uri).build();
 
         Response response = okHttpClient.newCall(request).execute();
-        Log.e(TAG, "postJSON: request" + request.toString());
         if (response.isSuccessful()) {
             return response.body().bytes();
         } else {
-            Log.e(TAG, "getRequest: response:" + "null");
             return null;
         }
     }

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.cspy.floweranalysis.adapter.DongtaiAdapter;
@@ -59,13 +60,12 @@ public class DongtaiActivity extends AppCompatActivity {
         }
 
 
-        recyclerView = findViewById(R.id.recyclerview);
-        swipeRefreshLayout = findViewById(R.id.swiptlayout);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiptlayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                RefreshDongtaiList refreshDongtai = new RefreshDongtaiList();
-                refreshDongtai.execute();
+                refreshLayout();
             }
         });
 
@@ -80,10 +80,11 @@ public class DongtaiActivity extends AppCompatActivity {
             currentList = myApplication.getAllDongtaiList();
         }
 
-        adapter = new DongtaiAdapter(currentList, myApplication.getUser(), myApplication);
+        Log.e(TAG, "onCreate: currentList.Size:" + currentList.size());
+
+        adapter = new DongtaiAdapter(currentList, myApplication.getUser(), myApplication, this);
         recyclerView.setAdapter(adapter);
-        RefreshDongtaiList refreshDongtai = new RefreshDongtaiList();
-        refreshDongtai.execute();
+        refreshLayout();
 
 
     }
@@ -116,6 +117,7 @@ public class DongtaiActivity extends AppCompatActivity {
             } else {
                 adapter.refreshItem();
             }
+            Log.e(TAG, "doInBackground: adapter.size():" + adapter.getItemCount());
             return false;
         }
 
@@ -125,6 +127,11 @@ public class DongtaiActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    public void refreshLayout() {
+        RefreshDongtaiList refreshDongtai = new RefreshDongtaiList();
+        refreshDongtai.execute();
     }
 
 

@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextInputEditText usertel;
     TextInputEditText msg;
     RadioGroup sexgroup;
-    String trueMsg = "123456";
+    String trueMsg = "";
 
     ProgressDialog progressDialog;
 
@@ -52,18 +52,18 @@ public class RegisterActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        username = findViewById(R.id.register_username);
-        password1 = findViewById(R.id.register_password1);
-        password2 = findViewById(R.id.register_password2);
-        usertel = findViewById(R.id.register_tel);
-        msg = findViewById(R.id.register_msg);
-        sexgroup = findViewById(R.id.register_sex_group);
+        username = (TextInputEditText) findViewById(R.id.register_username);
+        password1 = (TextInputEditText) findViewById(R.id.register_password1);
+        password2 = (TextInputEditText) findViewById(R.id.register_password2);
+        usertel = (TextInputEditText) findViewById(R.id.register_tel);
+        msg = (TextInputEditText) findViewById(R.id.register_msg);
+        sexgroup = (RadioGroup) findViewById(R.id.register_sex_group);
         sexgroup.check(R.id.sex_male);
 
         progressDialog = new ProgressDialog(this);
 
 
-        sendRegisterBtn = findViewById(R.id.register_confirm_btn);
+        sendRegisterBtn = (Button) findViewById(R.id.register_confirm_btn);
         sendRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        final Button sendMsgBtn = findViewById(R.id.register_sendMsg);
+        final Button sendMsgBtn = (Button) findViewById(R.id.register_sendMsg);
         sendMsgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,10 +92,22 @@ public class RegisterActivity extends AppCompatActivity {
                         if (!TextUtils.isEmpty(usertelStr) && usertelStr.length() == 11) {
                             String uri = HttpConnect.sendMsgUri + "?usertel=" + usertelStr;
                             Log.e(TAG, "run: sendMsgUri JSON:" + uri);
+
                             try {
                                 HttpConnect hc = new HttpConnect();
                                 JSONObject resultJSON = hc.getRequest(uri);
-                                trueMsg = resultJSON.getString("data");
+
+                                if (resultJSON != null && resultJSON.get("msg").equals("1")) {
+                                    trueMsg = resultJSON.getString("data");
+                                } else {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(RegisterActivity.this, "手机号错误", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
                                 Log.e(TAG, "run: resultJSON" + resultJSON);
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -103,16 +115,21 @@ public class RegisterActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
+
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(RegisterActivity.this, "手机号格式错误", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
+
+
                     }
                 }).start();
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendMsgBtn.setClickable(false);
-                    }
-                });
+                sendMsgBtn.setEnabled(false);
                 CountDownTimer timer = new CountDownTimer(30 * 1000, 1000) {
 
                     @Override
@@ -127,6 +144,8 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }.start();
             }
+
+
         });
 
 
@@ -150,7 +169,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password2Str = password2.getText().toString();
         String usertelStr = usertel.getText().toString();
         String userMsg = msg.getText().toString();
-        RadioButton selectedSex = findViewById(sexgroup.getCheckedRadioButtonId());
+        RadioButton selectedSex = (RadioButton) findViewById(sexgroup.getCheckedRadioButtonId());
         String sex = String.valueOf(selectedSex.getText());
 
         if (TextUtils.isEmpty(usernameStr) || TextUtils.isEmpty(password1Str) || TextUtils.isEmpty(password2Str) || !password1Str.equals(password2Str)
