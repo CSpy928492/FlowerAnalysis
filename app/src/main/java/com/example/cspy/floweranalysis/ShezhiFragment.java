@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.cspy.floweranalysis.pojo.User;
@@ -40,7 +41,8 @@ public class ShezhiFragment extends Fragment {
             }
         });
 
-        TextView allDongtai = (TextView) view.findViewById(R.id.dongtai_all);
+        RelativeLayout allDongtai = (RelativeLayout) view.findViewById(R.id.layout_all_dongtai);
+//        TextView allDongtai = (TextView) view.findViewById(R.id.dongtai_all);
         allDongtai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +52,8 @@ public class ShezhiFragment extends Fragment {
             }
         });
 
-        TextView myDongtai = (TextView) view.findViewById(R.id.dongtai_me);
+        RelativeLayout myDongtai = (RelativeLayout) view.findViewById(R.id.layout_my_dongtai);
+//        TextView myDongtai = (TextView) view.findViewById(R.id.dongtai_me);
         myDongtai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

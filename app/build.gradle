@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'fa'
             keyPassword 'nwjjj123'
-            storeFile file('E:/k/flowerAnalysis.jks')
+            storeFile file('D:/k/flowerAnalysis.jks')
             storePassword 'nwjjj123'
         }
     }
@@ -17,11 +17,15 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
             signingConfig signingConfigs.config
         }
     }

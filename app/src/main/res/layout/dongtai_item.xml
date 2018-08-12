@@ -5,42 +5,36 @@
     android:layout_marginBottom="15dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
+    app:cardCornerRadius="4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
-        android:id="@+id/layout_relative"
+    <LinearLayout
+        android:id="@+id/layout_linear"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:id="@+id/dongtai_tittle"
+            android:id="@+id/layout_dongtai_tittle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/dongtai_username"
-                android:layout_alignParentStart="true"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="15sp"
+                android:id="@+id/dongtai_title"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <ImageButton
                 android:id="@+id/dongtai_del_btn"
+                android:layout_below="@id/dongtai_title"
+                android:layout_centerInParent="true"
                 android:background="@drawable/trash"
                 android:layout_alignParentEnd="true"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
 
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/dongtai_content"
-            android:layout_below="@id/dongtai_tittle"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="25sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/dongtai_image"
@@ -49,30 +43,26 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/dongtai_zhiwuname"
-            android:layout_below="@id/dongtai_image"
+            android:id="@+id/dongtai_content"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="15sp"
+            android:textSize="25sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/dontai_time"
-            android:layout_below="@id/dongtai_zhiwuname"
+            android:id="@+id/dongtai_time"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/dongtai_location"
-            android:layout_below="@id/dontai_time"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

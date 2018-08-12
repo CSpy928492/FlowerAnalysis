@@ -26,17 +26,15 @@ public class MyApplication extends Application {
 
     private static final String TAG = "MyApplication";
 
+    String ak = "ONDUSCNY8laiUakuMFSt3p92bv4bqLck";//&callback=renderReverse
+    String sha1 = "A9:63:90:CB:9F:7F:BE:7D:E6:6B:95:70:D2:F1:9F:A4:41:08:03:6C";
+
 
     volatile private List<Dongtai> allDongtaiList;
     private User user;
 
     private JSONObject location;
-    private boolean locationValid;
-
-    private boolean permission_camera;
-    private boolean permission_write_external;
-    private boolean permission_fine_location;
-    private boolean permission_coarse_location;
+    private volatile boolean locationValid;
 
     LocationClient mLocationClient;
 
@@ -115,39 +113,7 @@ public class MyApplication extends Application {
     }
 
 
-    public boolean isPermission_camera() {
-        return permission_camera;
-    }
-
-    public void setPermission_camera(boolean permission_camera) {
-        this.permission_camera = permission_camera;
-    }
-
-    public boolean isPermission_write_external() {
-        return permission_write_external;
-    }
-
-    public void setPermission_write_external(boolean permission_write_external) {
-        this.permission_write_external = permission_write_external;
-    }
-
-    public boolean isPermission_fine_location() {
-        return permission_fine_location;
-    }
-
-    public void setPermission_fine_location(boolean permission_fine_location) {
-        this.permission_fine_location = permission_fine_location;
-    }
-
-    public boolean isPermission_coarse_location() {
-        return permission_coarse_location;
-    }
-
-    public void setPermission_coarse_location(boolean permission_coarse_location) {
-        this.permission_coarse_location = permission_coarse_location;
-    }
-
-    public boolean isLocationValid() {
+    public synchronized boolean isLocationValid() {
         return locationValid;
     }
 
@@ -194,14 +160,14 @@ public class MyApplication extends Application {
                         JSONObject jsonObject = new JSONObject(dongtai.getLocation());
                         String x = jsonObject.getString("x");
                         String y = jsonObject.getString("y");
-                        String ak = "ONDUSCNY8laiUakuMFSt3p92bv4bqLck";//&callback=renderReverse
-                        String uri = "http://api.map.baidu.com/geocoder/v2/?ak=" + ak + "&location=" + x + "," + y + "&output=json&pois=0&mcode=" + "45:B5:D6:03:EB:1F:E3:7F:D9:59:E8:06:90:C4:6B:06:DF:64:64:69;com.example.cspy.floweranalysis";
+
+                        String uri = "http://api.map.baidu.com/geocoder/v2/?ak=" + ak + "&location=" + x + "," + y + "&output=json&pois=0&mcode=" + sha1 + ";com.example.cspy.floweranalysis";
                         HttpConnect locationConnect = new HttpConnect();
                         JSONObject hLocationJSON = locationConnect.getRequest(uri);
                         if (hLocationJSON != null && hLocationJSON.get("status").equals(0)) {
                             dongtai.sethLocation(hLocationJSON.getJSONObject("result").get("formatted_address").toString());
                         } else {
-                            dongtai.sethLocation("江苏省南京市");
+                            dongtai.sethLocation("江苏省");
                         }
 
 

@@ -1,5 +1,6 @@
 package com.example.cspy.floweranalysis;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -86,9 +87,12 @@ public class FujinFragment extends Fragment {
 
                 View markerView = View.inflate(getActivity(), R.layout.marker_item, null);
                 TextView textView = (TextView) markerView.findViewById(R.id.marker_text);
+                textView.setBackgroundColor(0x7f888888);
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 ImageView imageView = (ImageView) markerView.findViewById(R.id.marker_icon);
                 textView.setText(dongtai.getZhiwuName());
-                textView.setTextSize(80);
+                textView.setTextSize(60);
+                textView.setTextColor(Color.WHITE);
                 imageView.setImageBitmap(dongtai.getImage());
 
                 BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromView(markerView);

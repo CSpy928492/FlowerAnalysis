@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,6 +37,9 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText password;
     ProgressDialog progressDialog;
 
+    TextInputLayout textInputLayout;
+    TextInputLayout passwordLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,35 @@ public class LoginActivity extends AppCompatActivity {
 
         usertel = (TextInputEditText) findViewById(R.id.login_account);
         password = (TextInputEditText) findViewById(R.id.login_password);
+        textInputLayout = (TextInputLayout) findViewById(R.id.layout_account);
+        textInputLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    String usertelStr = usertel.getText().toString();
+                    if (TextUtils.isEmpty(usertelStr)) {
+                        textInputLayout.setError("请输入手机号");
+                    } else {
+                        textInputLayout.setErrorEnabled(false);
+                    }
+                }
+            }
+        });
+        passwordLayout = (TextInputLayout) findViewById(R.id.layout_password);
+        passwordLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    String passwordStr = password.getText().toString();
+                    if (TextUtils.isEmpty(passwordStr)) {
+                        passwordLayout.setError("请输入手机号");
+                    } else {
+                        passwordLayout.setErrorEnabled(false);
+                    }
+                }
+            }
+        });
+
         progressDialog = new ProgressDialog(this);
 
         Intent intent = getIntent();

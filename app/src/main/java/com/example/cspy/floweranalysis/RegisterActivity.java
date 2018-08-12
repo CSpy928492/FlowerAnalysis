@@ -4,11 +4,13 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +40,12 @@ public class RegisterActivity extends AppCompatActivity {
     RadioGroup sexgroup;
     String trueMsg = "";
 
+    TextInputLayout usernameLayout;
+    TextInputLayout password1Layout;
+    TextInputLayout password2Layout;
+    TextInputLayout usertelLayout;
+    TextInputLayout msgLayout;
+
     ProgressDialog progressDialog;
 
     @Override
@@ -53,10 +61,97 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         username = (TextInputEditText) findViewById(R.id.register_username);
+        usernameLayout = (TextInputLayout) findViewById(R.id.layout_register_account);
+        username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    String name = username.getText().toString();
+                    if (TextUtils.isEmpty(name)) {
+                        usernameLayout.setError("用户名不能为空");
+                    } else {
+                        usernameLayout.setErrorEnabled(false);
+                    }
+                }
+            }
+        });
         password1 = (TextInputEditText) findViewById(R.id.register_password1);
+        password1Layout = (TextInputLayout) findViewById(R.id.layout_register_password);
+        password1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                //失去焦点的时候
+                if (!b) {
+                    String p1 = password1.getText().toString();
+                    if (TextUtils.isEmpty(p1)) {
+                        password1Layout.setError("密码不能为空");
+                    } else {
+                        password1Layout.setErrorEnabled(false);
+                    }
+                }
+            }
+        });
+
         password2 = (TextInputEditText) findViewById(R.id.register_password2);
+        password2Layout = (TextInputLayout) findViewById(R.id.layout_register_password1);
+        password2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    if (TextUtils.isEmpty(password2.getText().toString())) {
+                        password2Layout.setError("确认密码不能为空");
+                    } else {
+                        String p1 = password1.getText().toString();
+                        String p2 = password2.getText().toString();
+                        if (!TextUtils.equals(p1, p2)) {
+                            password2Layout.setError("密码不一致");
+                        } else {
+                            password2Layout.setErrorEnabled(false);
+                        }
+                    }
+                }
+
+            }
+        });
         usertel = (TextInputEditText) findViewById(R.id.register_tel);
+        usertelLayout = (TextInputLayout) findViewById(R.id.layout_register_tel);
+        usertel.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    String tel = usertel.getText().toString();
+                    if (TextUtils.isEmpty(tel)) {
+                        usertelLayout.setError("手机号不能为空");
+                    } else {
+                        if (tel.length() != 11) {
+                            usertelLayout.setError("手机格式不正确");
+                        } else {
+                            usertelLayout.setErrorEnabled(false);
+                        }
+                    }
+                }
+            }
+        });
+
         msg = (TextInputEditText) findViewById(R.id.register_msg);
+        msgLayout = (TextInputLayout) findViewById(R.id.layout_userMsg);
+        msg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    String msgStr = msg.getText().toString();
+                    if (TextUtils.isEmpty(msgStr)) {
+                        msgLayout.setError("验证码不能为空");
+                    } else {
+                        if (msg.length() != 6) {
+                            msgLayout.setError("验证码格式不正确");
+                        } else {
+                            msgLayout.setErrorEnabled(false);
+                        }
+                    }
+                }
+            }
+        });
         sexgroup = (RadioGroup) findViewById(R.id.register_sex_group);
         sexgroup.check(R.id.sex_male);
 

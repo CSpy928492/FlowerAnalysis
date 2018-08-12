@@ -19,9 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
     private int selectedItemId = R.id.item_fujin;
 
-    final int SDK_PERMISSION_REQUEST = 0;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,17 +28,6 @@ public class MainActivity extends AppCompatActivity {
         final FujinFragment fujinFragment = new FujinFragment();
         final ShibieFragment shibieFragment = new ShibieFragment();
         final ShezhiFragment shezhiFragment = new ShezhiFragment();
-
-
-        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        for (int i = 0; i < permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(getBaseContext(), permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{permissions[i]}, i);
-            }
-        }
-
-
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -81,41 +67,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        MyApplication myApplication = (MyApplication) getApplication();
-
-        switch (requestCode) {
-            case 0:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myApplication.setPermission_coarse_location(true);
-                } else {
-                    myApplication.setPermission_coarse_location(false);
-                }
-                break;
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myApplication.setPermission_fine_location(true);
-                } else {
-                    myApplication.setPermission_fine_location(false);
-                }
-                break;
-            case 2:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myApplication.setPermission_camera(true);
-                } else {
-                    myApplication.setPermission_camera(false);
-                }
-                break;
-            case 3:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myApplication.setPermission_write_external(true);
-                } else {
-                    myApplication.setPermission_write_external(false);
-                }
-                break;
-
-        }
-    }
 
 }

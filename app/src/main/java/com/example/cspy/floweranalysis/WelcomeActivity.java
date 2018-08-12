@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.cspy.floweranalysis.LoginActivity.CORRECT_STATE;
 
@@ -45,8 +46,15 @@ public class WelcomeActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
 
     Intent intent;
-
     int i = 0;
+
+    final int mRequestCode = 1;
+    String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    List<String> permissionList = new ArrayList<>();
+
+    volatile Boolean already = false;
+
 
 
     @Override
@@ -68,11 +76,29 @@ public class WelcomeActivity extends AppCompatActivity {
         task3 = (TextView) findViewById(R.id.task_3);
         task3.setBackgroundColor(getResources().getColor(R.color.normal_color, null));
 
-
-
+        //获取权限
+        permissionList.clear();
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(getBaseContext(), permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(permissions[i]);
+            }
+        }
+        if (permissionList.size() > 0) {
+            String[] permission = permissionList.toArray(new String[permissionList.size()]);
+            ActivityCompat.requestPermissions(this, permission, mRequestCode);
+        } else {
+            already = true;
+        }
         new InitTask().execute();
 
+
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        already = true;
+    }
+
 
 
 
@@ -80,6 +106,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
+
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(WelcomeActivity.this);
             String usertel = sharedPreferences.getString("usertel", null);
             String password = sharedPreferences.getString("password", null);
@@ -175,14 +203,13 @@ public class WelcomeActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(dongtai.getLocation());
                             String x = jsonObject.getString("x");
                             String y = jsonObject.getString("y");
-                            String ak = "ONDUSCNY8laiUakuMFSt3p92bv4bqLck";//&callback=renderReverse
-                            String uri = "http://api.map.baidu.com/geocoder/v2/?ak=" + ak + "&location=" + x + "," + y + "&output=json&pois=0&mcode=" + "45:B5:D6:03:EB:1F:E3:7F:D9:59:E8:06:90:C4:6B:06:DF:64:64:69;com.example.cspy.floweranalysis";
+                            String uri = "http://api.map.baidu.com/geocoder/v2/?ak=" + myApplication.ak + "&location=" + x + "," + y + "&output=json&pois=0&mcode=" + myApplication.sha1 + ";com.example.cspy.floweranalysis";
                             HttpConnect locationConnect = new HttpConnect();
                             JSONObject hLocationJSON = locationConnect.getRequest(uri);
                             if (hLocationJSON != null && hLocationJSON.get("status").equals(0)) {
                                 dongtai.sethLocation(hLocationJSON.getJSONObject("result").get("formatted_address").toString());
                             } else {
-                                dongtai.sethLocation("江苏省南京市");
+                                dongtai.sethLocation("江苏省");
                             }
 
 
@@ -215,7 +242,7 @@ public class WelcomeActivity extends AppCompatActivity {
             //获取本机位置
             int i = 10;
             //等待定位2秒钟
-            while (!(myApplication.isPermission_coarse_location() || myApplication.isPermission_fine_location())) {
+            while (true) {
                 if (myApplication.isLocationValid()) {
                     publishProgress(FujinFragment.CORRECT_LOCATION);
                     break;
@@ -234,16 +261,24 @@ public class WelcomeActivity extends AppCompatActivity {
                 publishProgress(FujinFragment.WRONG_LOCATION);
             }
 
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while (true) {
+                try {
+                    Thread.sleep(300);
+                    if (already) {
+                        break;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+
             finish();
             startActivity(intent);
         }

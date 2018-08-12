@@ -1,24 +1,16 @@
 package com.example.cspy.floweranalysis.adapter;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Config;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
 import com.example.cspy.floweranalysis.DongtaiActivity;
 import com.example.cspy.floweranalysis.MyApplication;
 import com.example.cspy.floweranalysis.R;
@@ -32,7 +24,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHolder> {
@@ -66,10 +57,10 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Dongtai dongtai = mDongtaiList.get(position);
-        holder.dtUserName.setText("用户名：" + dongtai.getUserName());
-        holder.dtContent.setText("内容：“" + dongtai.getContent() + "”");
+        String content = TextUtils.isEmpty(dongtai.getContent()) ? "请欣赏图片" : dongtai.getContent();
+        holder.dtContent.setText(dongtai.getUserName() + " 说：“" + content + "”");
         holder.dtImageView.setImageBitmap(dongtai.getImage());
-        holder.dtZhiwuName.setText(dongtai.getZhiwuName());
+        holder.dtDongtaiTitle.setText("鉴定结果：" + dongtai.getZhiwuName());
         holder.dtTime.setText(getTime(dongtai.getTime()));
         holder.dtLocation.setText(dongtai.gethLocation());
         holder.delBtn.setVisibility(dongtai.getUserId().equals(user.getUserid()) ? View.VISIBLE : View.INVISIBLE);
@@ -98,21 +89,19 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView dtUserName;
         TextView dtContent;
         ImageView dtImageView;
-        TextView dtZhiwuName;
+        TextView dtDongtaiTitle;
         TextView dtTime;
         TextView dtLocation;
         ImageButton delBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            dtUserName = (TextView) itemView.findViewById(R.id.dongtai_username);
             dtContent = (TextView) itemView.findViewById(R.id.dongtai_content);
             dtImageView = (ImageView) itemView.findViewById(R.id.dongtai_image);
-            dtZhiwuName = (TextView) itemView.findViewById(R.id.dongtai_zhiwuname);
-            dtTime = (TextView) itemView.findViewById(R.id.dontai_time);
+            dtDongtaiTitle = (TextView) itemView.findViewById(R.id.dongtai_title);
+            dtTime = (TextView) itemView.findViewById(R.id.dongtai_time);
             dtLocation = (TextView) itemView.findViewById(R.id.dongtai_location);
             delBtn = (ImageButton) itemView.findViewById(R.id.dongtai_del_btn);
         }

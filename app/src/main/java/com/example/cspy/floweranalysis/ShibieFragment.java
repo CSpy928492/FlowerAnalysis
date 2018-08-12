@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -106,13 +109,14 @@ public class ShibieFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_shibie,container,false);
 
-        ImageButton btnFromSD = (ImageButton) view.findViewById(R.id.fromSD);
-        ImageButton btnFromCamera = (ImageButton) view.findViewById(R.id.fromCramera);
+        CardView cardFromSD = (CardView) view.findViewById(R.id.card_sd);
+        CardView cardFromCam = (CardView) view.findViewById(R.id.card_cam);
 
         tempPicPath = getActivity().getExternalCacheDir() + "/temp.jpg";
         tempTakePhotoPath = getActivity().getExternalCacheDir() + "/tempPhoto.jpg";
 
-        btnFromCamera.setOnClickListener(new View.OnClickListener() {
+
+        cardFromCam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -123,7 +127,7 @@ public class ShibieFragment extends Fragment {
             }
         });
 
-        btnFromSD.setOnClickListener(new View.OnClickListener() {
+        cardFromSD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,14 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/account_set"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/normal_color"
             android:clickable="false"
             android:focusable="false" />
 
         <TextView
             android:id="@+id/uid"
             android:layout_width="match_parent"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/normal_color"
             android:textSize="30sp"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -39,30 +40,86 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/dongtai_all"
-            android:text="@string/dongtai_all"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="30sp"
+        <RelativeLayout
+            android:focusable="true"
+            android:clickable="true"
+            android:id="@+id/layout_all_dongtai"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp">
 
-        <TextView
-            android:id="@+id/dongtai_me"
-            android:text="@string/dongtai_my"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="30sp"
+            <ImageView
+                android:id="@+id/icon_all_dongtai"
+                android:layout_centerVertical="true"
+                android:src="@drawable/browse"
+                android:layout_alignParentStart="true"
+                android:layout_width="@dimen/accoung_icon_width"
+                android:layout_height="@dimen/accoung_icon_width" />
+
+            <TextView
+                android:id="@+id/dongtai_all"
+                android:layout_toEndOf="@id/icon_all_dongtai"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:text="@string/dongtai_all"
+                android:textColor="@color/normal_color"
+                android:textSize="25sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/arrow_right"
+                android:layout_width="@dimen/accoung_icon_width"
+                android:layout_height="@dimen/accoung_icon_width" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:focusable="true"
+            android:clickable="true"
+            android:id="@+id/layout_my_dongtai"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp">
+
+            <ImageView
+                android:id="@+id/icon_my_dongtai"
+                android:layout_centerVertical="true"
+                android:src="@drawable/favorite"
+                android:layout_alignParentStart="true"
+                android:layout_width="@dimen/accoung_icon_width"
+                android:layout_height="@dimen/accoung_icon_width" />
+
+            <TextView
+                android:id="@+id/dongtai_me"
+                android:layout_toEndOf="@id/icon_my_dongtai"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:text="@string/dongtai_my"
+                android:textColor="@color/normal_color"
+                android:textSize="25sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/arrow_right"
+                android:layout_width="@dimen/accoung_icon_width"
+                android:layout_height="@dimen/accoung_icon_width" />
+
+
+        </RelativeLayout>
 
 
     </LinearLayout>
 
     <Button
         android:id="@+id/exitBtn"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="@color/normal_color"
+        android:background="@color/normal_color"
+        android:textColor="@color/colorPrimaryDark"
         android:text="@string/exit_btn"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
