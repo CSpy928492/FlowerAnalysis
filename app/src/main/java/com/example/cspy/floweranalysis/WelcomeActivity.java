@@ -56,7 +56,6 @@ public class WelcomeActivity extends AppCompatActivity {
     volatile Boolean already = false;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,8 +97,6 @@ public class WelcomeActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         already = true;
     }
-
-
 
 
     class InitTask extends AsyncTask<Void, Integer, Void> {
@@ -180,70 +177,22 @@ public class WelcomeActivity extends AppCompatActivity {
             }
 
             //与服务器连接，保存全部动态
-            HttpConnect connect = new HttpConnect();
             try {
-                JSONObject resultJSON = connect.getRequest(HttpConnect.chaxunAllDongtai);
-                if (resultJSON != null) {
-                    //返回成功
-                    if (resultJSON.get("msg").equals("1")) {
-                        JSONArray dongtaiArray = resultJSON.getJSONArray("data");
-                        ArrayList<Dongtai> dongtais = new ArrayList<>();
-                        for (int i = 0; i < dongtaiArray.length(); i++) {
-                            JSONObject json = dongtaiArray.getJSONObject(i);
-                            Dongtai dongtai = new Dongtai();
-                            dongtai.setContent(json.getString("content"));
-                            dongtai.setLocation(json.getString("location"));
-                            dongtai.setTime(json.getString("time"));
-                            dongtai.setZhiwuName(json.getString("zhiwuname"));
-                            dongtai.setUserId(json.getString("userid"));
-                            dongtai.setUserName(json.getString("username"));
-                            dongtai.setDongtaiId(json.getString("dongtaiid"));
-
-                            //转换成可读的形式
-                            JSONObject jsonObject = new JSONObject(dongtai.getLocation());
-                            String x = jsonObject.getString("x");
-                            String y = jsonObject.getString("y");
-                            String uri = "http://api.map.baidu.com/geocoder/v2/?ak=" + myApplication.ak + "&location=" + x + "," + y + "&output=json&pois=0&mcode=" + myApplication.sha1 + ";com.example.cspy.floweranalysis";
-                            HttpConnect locationConnect = new HttpConnect();
-                            JSONObject hLocationJSON = locationConnect.getRequest(uri);
-                            if (hLocationJSON != null && hLocationJSON.get("status").equals(0)) {
-                                dongtai.sethLocation(hLocationJSON.getJSONObject("result").get("formatted_address").toString());
-                            } else {
-                                dongtai.sethLocation("江苏省");
-                            }
-
-
-                            //提取图片
-                            String filepath = json.getString("img");
-                            String[] tempstrs = filepath.split("\\\\");
-                            //合成图片Url
-                            String filename = HttpConnect.getImageUri + tempstrs[tempstrs.length - 1];
-                            HttpConnect connect1 = new HttpConnect();
-                            byte[] bytes = connect1.getImage(filename);
-                            Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(bytes));
-                            dongtai.setImage(bitmap);
-                            dongtais.add(dongtai);
-                        }
-                        myApplication.setAllDongtaiList(dongtais);
-                        publishProgress(DongtaiActivity.ALL_DONGTAI_SUCCESS);
-                    } else {
-                        publishProgress(DongtaiActivity.ALL_DONGTAI_FAIL);
-                    }
-                } else {
-                    publishProgress(DongtaiActivity.ALL_DONGTAI_FAIL);
-                }
+                myApplication.initDongtai();
+                publishProgress(DongtaiActivity.ALL_DONGTAI_SUCCESS);
             } catch (IOException e) {
                 e.printStackTrace();
                 publishProgress(DongtaiActivity.ALL_DONGTAI_FAIL);
             } catch (JSONException e) {
                 e.printStackTrace();
+                publishProgress(DongtaiActivity.ALL_DONGTAI_FAIL);
             }
 
             //获取本机位置
             int i = 10;
             //等待定位2秒钟
             while (true) {
-                if (myApplication.isLocationValid()) {
+                if (myApplication.getLocationControl().isLocationValid()) {
                     publishProgress(FujinFragment.CORRECT_LOCATION);
                     break;
                 }

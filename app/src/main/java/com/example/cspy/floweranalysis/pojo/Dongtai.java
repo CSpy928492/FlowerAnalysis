@@ -12,15 +12,25 @@ public class Dongtai {
     private String userId;
     private String userName;
     private String zhiwuName;
-    private String location;
     private String time;
     private String content;
+
+    private String bitmapUri;
     private Bitmap image;
 
+    private String location;
     private String hLocation;
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getBitmapUri() {
+        return bitmapUri;
+    }
+
+    public void setBitmapUri(String bitmapUri) {
+        this.bitmapUri = bitmapUri;
     }
 
     public void setUserId(String userId) {

@@ -31,8 +31,9 @@
                 android:layout_centerInParent="true"
                 android:background="@drawable/trash"
                 android:layout_alignParentEnd="true"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="6dp" />
 
         </RelativeLayout>
 

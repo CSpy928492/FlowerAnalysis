@@ -25,8 +25,6 @@ public class DongtaiActivity extends AppCompatActivity {
 
     private static final String TAG = "DongtaiActivity";
 
-    List<Dongtai> currentList;
-
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
 
@@ -73,20 +71,9 @@ public class DongtaiActivity extends AppCompatActivity {
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
 
-
-        if (myDongtai) {
-            currentList = myApplication.getMyDongtaiList();
-        } else {
-            currentList = myApplication.getAllDongtaiList();
-        }
-
-        Log.e(TAG, "onCreate: currentList.Size:" + currentList.size());
-
-        adapter = new DongtaiAdapter(currentList, myApplication.getUser(), myApplication, this);
+        adapter = new DongtaiAdapter(myApplication.getUser(), myApplication, this);
         recyclerView.setAdapter(adapter);
         refreshLayout();
-
-
     }
 
 
@@ -105,13 +92,10 @@ public class DongtaiActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             swipeRefreshLayout.setRefreshing(true);
-
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            MyApplication myApplication = (MyApplication) getApplication();
-            myApplication.refreshDongtai();
             if (myDongtai) {
                 adapter.refreshMyItem();
             } else {

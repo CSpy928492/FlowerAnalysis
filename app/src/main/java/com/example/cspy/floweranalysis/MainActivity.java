@@ -14,8 +14,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 
-
 public class MainActivity extends AppCompatActivity {
+
 
     private int selectedItemId = R.id.item_fujin;
 
@@ -24,10 +24,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         final FujinFragment fujinFragment = new FujinFragment();
         final ShibieFragment shibieFragment = new ShibieFragment();
         final ShezhiFragment shezhiFragment = new ShezhiFragment();
+
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();

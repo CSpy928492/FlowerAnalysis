@@ -40,7 +40,7 @@ public class AccountSetting extends AppCompatActivity {
         TextView textUserSex = (TextView) findViewById(R.id.account_sex);
         textUserSex.setText(user.getSex());
         TextView textUserDongtaiNum = (TextView) findViewById(R.id.account_dongtai_num);
-        textUserDongtaiNum.setText(myApplication.getMyDongtaiList().size() + "");
+        textUserDongtaiNum.setText(myApplication.getAllDongtai().getDongtaiListByUID(user.getUserid()).size() + "");
 
     }
 

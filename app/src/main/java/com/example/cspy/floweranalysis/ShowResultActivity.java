@@ -163,7 +163,7 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
         protected JSONObject doInBackground(Void... voids) {
             MyApplication myApplication = (MyApplication) getApplication();
             User user = myApplication.getUser();
-            JSONObject location = myApplication.getLocation();
+            JSONObject location = myApplication.getLocationControl().getLocation();
 
             OkHttpClient client = new OkHttpClient();
             RequestBody filebody = RequestBody.create(MediaType.parse("image/jpeg"), image);
@@ -229,7 +229,7 @@ public class ShowResultActivity extends AppCompatActivity implements View.OnClic
         protected Boolean doInBackground(String... strings) {
             MyApplication myApplication = (MyApplication) getApplication();
             User user = myApplication.getUser();
-            JSONObject locationJSON = myApplication.getLocation();
+            JSONObject locationJSON = myApplication.getLocationControl().getLocation();
 
             String userid = "";
             String username = "";

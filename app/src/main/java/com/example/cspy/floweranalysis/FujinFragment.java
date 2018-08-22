@@ -1,5 +1,6 @@
 package com.example.cspy.floweranalysis;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -46,8 +47,13 @@ public class FujinFragment extends Fragment {
     private TextureMapView mapView = null;
     private BaiduMap baiduMap;
     LocationClient mLocationClient;
+    Context context;
 
     Boolean isFirstTime;
+
+    public FujinFragment() {
+
+    }
 
 
     @Nullable
@@ -66,10 +72,16 @@ public class FujinFragment extends Fragment {
         mLocationClient.registerLocationListener(mListener);
         mLocationClient.start();
 
-        MyApplication myApplication = (MyApplication) getActivity().getApplication();
-        List<OverlayOptions> options = new ArrayList<>();
+        return view;
 
-        for (Dongtai dongtai : myApplication.getAllDongtaiList()) {
+
+    }
+
+    public void refreshMarker() {
+        List<OverlayOptions> options = new ArrayList<>();
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+
+        for (Dongtai dongtai : myApplication.getAllDongtai().getDongtaiList()) {
             String location = dongtai.getLocation();
             try {
                 JSONObject locationJSON = new JSONObject(location);
@@ -81,9 +93,7 @@ public class FujinFragment extends Fragment {
 
                 Double y = Double.valueOf(format.format((Double) locationJSON.get("y") + Math.random() / 1000));
 
-
                 LatLng latLng = new LatLng(x, y);
-
 
                 View markerView = View.inflate(getActivity(), R.layout.marker_item, null);
                 TextView textView = (TextView) markerView.findViewById(R.id.marker_text);
@@ -102,13 +112,8 @@ public class FujinFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+        baiduMap.clear();
         baiduMap.addOverlays(options);
-
-
-
-        return view;
-
-
     }
 
     @Override
@@ -127,6 +132,7 @@ public class FujinFragment extends Fragment {
         mapView.onResume();
         isFirstTime = true;
         super.onResume();
+        refreshMarker();
 
     }
 
@@ -146,6 +152,7 @@ public class FujinFragment extends Fragment {
     public void onStart() {
         super.onStart();
         isFirstTime = true;
+        refreshMarker();
 
 
     }

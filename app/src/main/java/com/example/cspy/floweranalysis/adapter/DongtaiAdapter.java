@@ -15,6 +15,7 @@ import com.example.cspy.floweranalysis.DongtaiActivity;
 import com.example.cspy.floweranalysis.MyApplication;
 import com.example.cspy.floweranalysis.R;
 import com.example.cspy.floweranalysis.pojo.Dongtai;
+import com.example.cspy.floweranalysis.pojo.DongtaiList;
 import com.example.cspy.floweranalysis.pojo.User;
 import com.example.cspy.floweranalysis.util.HttpConnect;
 
@@ -24,22 +25,21 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHolder> {
 
-    List<Dongtai> mDongtaiList;
-    List<Dongtai> dongtaiList;
+    DongtaiList dongtaiList;
     User user;
     MyApplication myApplication;
     DongtaiActivity dongtaiActivity;
 
-    public DongtaiAdapter(List<Dongtai> dongtaiList, User user, MyApplication myApplication, DongtaiActivity dongtaiActivity) {
-        this.mDongtaiList = new ArrayList<>();
-        this.dongtaiList = dongtaiList;
-        for (int i = dongtaiList.size() - 1; i >= 0; i--) {
-            mDongtaiList.add(dongtaiList.get(i));
-        }
+    public DongtaiAdapter(User user, MyApplication myApplication, DongtaiActivity dongtaiActivity) {
+        dongtaiList = myApplication.getAllDongtai().clone();
+        dongtaiList.reverse();
+
         this.user = user;
         this.myApplication = myApplication;
         this.dongtaiActivity = dongtaiActivity;
@@ -56,7 +56,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        Dongtai dongtai = mDongtaiList.get(position);
+        Dongtai dongtai = dongtaiList.getDongtaiList().get(position);
         String content = TextUtils.isEmpty(dongtai.getContent()) ? "请欣赏图片" : dongtai.getContent();
         holder.dtContent.setText(dongtai.getUserName() + " 说：“" + content + "”");
         holder.dtImageView.setImageBitmap(dongtai.getImage());
@@ -68,9 +68,8 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                Dongtai deleteDongtai = mDongtaiList.get(position);
+                Dongtai deleteDongtai = dongtaiList.getDongtaiList().get(position);
                 new DeleteTask().execute(deleteDongtai);
-
             }
         });
     }
@@ -85,7 +84,7 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return mDongtaiList.size();
+        return dongtaiList.getDongtaiList().size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -108,37 +107,35 @@ public class DongtaiAdapter extends RecyclerView.Adapter<DongtaiAdapter.ViewHold
     }
 
     public void refreshItem() {
-        for (Dongtai dongtai : myApplication.getAllDongtaiList()) {
-            if (!containsDongtai(mDongtaiList, dongtai)) {
-                mDongtaiList.add(0, dongtai);
-            }
-        }
+        myApplication.refreshDongtai();
+        dongtaiList.reverse();
+        dongtaiList.addNewAndRemoveDeleted(myApplication.getAllDongtai());
+        dongtaiList.reverse();
     }
 
     public void refreshMyItem() {
-        for (Dongtai dongtai : myApplication.getMyDongtaiList()) {
-            if (!containsDongtai(mDongtaiList, dongtai)) {
-                mDongtaiList.add(0, dongtai);
-            }
-        }
+        myApplication.refreshDongtai();
+        DongtaiList myDongtaiList = new DongtaiList(myApplication.getAllDongtai().getDongtaiListByUID(user.getUserid()));
+        dongtaiList.reverse();
+        dongtaiList.addNewAndRemoveDeleted(myDongtaiList);
+        dongtaiList.reverse();
     }
 
     private void deleteConfirm(Dongtai deleted) {
-        mDongtaiList.remove(deleted);
-        dongtaiList.remove(deleted);
-        myApplication.getAllDongtaiList().remove(deleted);
+        dongtaiList.getDongtaiList().remove(deleted);
+        myApplication.getAllDongtai().getDongtaiList().remove(deleted);
         notifyDataSetChanged();
     }
 
 
-    private Boolean containsDongtai(List<Dongtai> dongtais, Dongtai dongtai) {
-        for (Dongtai d : dongtais) {
-            if (d.getDongtaiId().equals(dongtai.getDongtaiId())) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private Boolean containsDongtai(List<Dongtai> dongtais, Dongtai dongtai) {
+//        for (Dongtai d : dongtais) {
+//            if (d.getDongtaiId().equals(dongtai.getDongtaiId())) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     class DeleteTask extends AsyncTask<Dongtai, Void, Boolean> {
         Dongtai delDongtai;
